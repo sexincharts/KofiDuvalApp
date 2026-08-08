@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Predictor by Kofi Duval | BetAndYou RDC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --card: #141418;
+      --card-inner: #1c1c22;
+      --yellow: #f7c600;
+      --yellow-glow: rgba(247, 198, 0, 0.25);
+      --text: #ffffff;
+      --muted: #8e8e9e;
+      --border: rgba(247, 198, 0, 0.15);
+      --green: #0cb86a;
+      --red: #ff3333;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      background-image: radial-gradient(circle at 50% 0%, #2a2200 0%, var(--bg) 70%);
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px var(--yellow-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 4px;
+      background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+    }
+
+    /* SCREENS */
+    .screen { display: none; animation: fadeIn 0.4s ease forwards; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* AUTH SCREEN */
+    .auth-header {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+    .auth-badge {
+      display: inline-block;
+      background: rgba(247, 198, 0, 0.1);
+      color: var(--yellow);
+      border: 1px solid var(--yellow);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .auth-title {
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .auth-title span { color: var(--yellow); }
+    .auth-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .avatar-box {
+      width: 90px;
+      height: 90px;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 2px solid var(--yellow);
+      box-shadow: 0 0 20px var(--yellow-glow);
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    /* MODAL ACCESS CODE */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-box {
+      background: var(--card);
+      border: 1px solid var(--yellow);
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: min(380px, 90%);
+      text-align: center;
+      box-shadow: 0 10px 30px var(--yellow-glow);
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 15px;
+    }
+    .code-input {
+      width: 100%;
+      background: var(--card-inner);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--yellow);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 6px;
+      padding: 12px;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .code-input:focus {
+      border-color: var(--yellow);
+      box-shadow: 0 0 10px var(--yellow-glow);
+    }
+    .error-txt {
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 700;
+      display: none;
+      margin-bottom: 12px;
+    }
+
+    /* BUTTONS */
+    .btn-btn {
+      width: 100%;
+      background: var(--yellow);
+      color: #000;
+      border: none;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--yellow-glow);
+      transition: all 0.15s ease;
+      margin-top: 10px;
+    }
+    .btn-btn:active { transform: scale(0.98); }
+    .btn-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+    .btn-sec {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: none;
+    }
+    .btn-sec:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    /* AUTH LOADING */
+    .auth-loader {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+    }
+    .progress-bar-wrap {
+      width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin-top: 10px;
+    }
+    .progress-bar-fill {
+      width: 0%; height: 100%; background: var(--yellow); transition: width 0.1s linear;
+    }
+
+    /* MAIN MENU HEADER */
+    .main-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--yellow);
+      text-transform: uppercase;
+    }
+    .status-online {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-online::before {
+      content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%;
+      box-shadow: 0 0 6px var(--green); animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* FLOATING LIVE WINNERS TICKER */
+    .live-ticker {
+      background: rgba(12, 184, 106, 0.08);
+      border: 1px solid rgba(12, 184, 106, 0.3);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: flashBorder 3s infinite;
+    }
+    .ticker-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ticker-tag {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .ticker-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .ticker-win {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--yellow);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    /* GAME GRID */
+    .game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .game-card {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .game-card:hover, .game-card:active {
+      border-color: var(--yellow);
+      background: rgba(247, 198, 0, 0.05);
+      transform: translateY(-2px);
+    }
+    .game-icon { font-size: 32px; margin-bottom: 8px; }
+    .game-name { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #fff; }
+
+    /* PREDICTOR SCREEN */
+    .back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .pred-header {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 20px;
+    }
+
+    .display-terminal {
+      background: #050507;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      margin-bottom: 15px;
+      font-family: 'Share Tech Mono', monospace;
+      text-align: center;
+    }
+
+    .bet-box {
+      background: var(--card-inner);
+      border: 1px solid rgba(247, 198, 0, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .bet-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .bet-val { font-size: 18px; color: var(--yellow); font-weight: 900; font-family: 'Share Tech Mono', monospace; margin-top: 2px; }
+
+    /* RESULTS VISUALS */
+    .res-coeff { font-size: 42px; font-weight: 900; color: var(--yellow); text-shadow: 0 0 15px var(--yellow-glow); }
+    
+    .mines-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 150px; margin: 0 auto;
+    }
+    .mine-cell {
+      width: 26px; height: 26px; background: #1a1a20; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px;
+    }
+    .mine-cell.safe { background: var(--yellow); color: #000; font-weight: bold; box-shadow: 0 0 8px var(--yellow); }
+
+    .apple-safe { background: rgba(12, 184, 106, 0.2); border: 1px solid #0cb86a; box-shadow: 0 0 8px rgba(12, 184, 106, 0.4); }
+
+    .penalty-txt { font-size: 18px; color: var(--yellow); font-weight: bold; }
+
+    .footer-txt {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="card">
+      
+      <div id="screen-auth" class="screen active">
+        <div class="auth-header">
+          <div class="auth-badge">BetAndYou Private Script</div>
+          <div class="auth-title">AI Predictor <br>by <span>Kofi Duval</span></div>
+          <div class="auth-subtitle">Système de prédiction algorithmique • CDF</div>
+        </div>
+
+        <div class="avatar-box">👑</div>
+
+        <button class="btn-btn" onclick="openCodeModal()">S'authentifier</button>
+
+        <div class="footer-txt">
+          Justice pour Masina • Exclusif BetAndYou 🇨🇩
+        </div>
+      </div>
+
+      <div id="screen-main" class="screen">
+        <div class="main-top">
+          <div class="brand-title">Kofi Duval AI</div>
+          <div class="status-online">Serveur BetAndYou OK</div>
+        </div>
+
+        <div class="live-ticker">
+          <div class="ticker-info">
+            <div class="ticker-tag">🔴 ÉTUDIANTS / EN DIRECT</div>
+            <div class="ticker-name" id="ticker-name">Jean-Pierre M.</div>
+          </div>
+          <div class="ticker-win" id="ticker-win">+125 000 CDF</div>
+        </div>
+
+        <div class="game-grid">
+          <div class="game-card" onclick="selectGame('Aviator', '✈️')">
+            <div class="game-icon">✈️</div>
+            <div class="game-name">Aviator</div>
+          </div>
+          <div class="game-card" onclick="selectGame('Crash', '💥')">
+            <div class="game-icon">💥</div>
+            <div class="game-name">Crash</div>
+          </div>
+          <div class="game-card" onclick="selectGame('Mines', '💎')">
+            <div class="game-icon">💎</div>
+            <div class="game-name">Mines</div>
+          </div>
+          <div class="game-card" onclick="selectGame('Penalty', '⚽')">
+            <div class="game-icon">⚽</div>
+            <div class="game-name">Penalty</div>
+          </div>
+          <div class="game-card" onclick="selectGame('Chicken Road', '🐔')">
+            <div class="game-icon">🐔</div>
+            <div class="game-name">Chicken</div>
+          </div>
+          <div class="game-card" onclick="selectGame('Apple of Fortune', '🍏')">
+            <div class="game-icon">🍏</div>
+            <div class="game-name">Apple</div>
+          </div>
+        </div>
+
+        <div class="footer-txt">
+          Devise : CDF • Algorithme Interne Contourné
+        </div>
+      </div>
+
+      <div id="screen-pred" class="screen">
+        <button class="back-btn" onclick="goBackMain()">← Menu Principal</button>
+        
+        <div class="pred-header" id="pred-game-title">✈️ Aviator</div>
+
+        <div class="display-terminal" id="terminal">
+          <div id="term-idle" style="color: var(--muted); font-size: 13px;">
+            Cliquez sur "Obtenir Taille du Pari" pour commencer l'analyse.
+          </div>
+          <div id="term-loader" style="display: none; width: 100%;">
+            <div id="loader-txt" style="color: var(--yellow); font-size: 13px;">Connexion au serveur...</div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="term-progress"></div></div>
+          </div>
+          <div id="term-result" style="display: none; width: 100%;"></div>
+        </div>
+
+        <div class="bet-box" id="bet-box">
+          <div class="bet-lbl">Taille du pari recommandée (Dépôt min 5000 CDF)</div>
+          <div class="bet-val" id="bet-val">250 CDF</div>
+        </div>
+
+        <button class="btn-btn btn-sec" id="btn-step1" onclick="getBetSize()">1. Obtenir Taille du Pari</button>
+        <button class="btn-btn" id="btn-step2" disabled onclick="getSignal()">2. Obtenir Signal</button>
+
+        <div class="footer-txt">
+          Garantie 10 tours avec dépôt de 5000 CDF
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="codeModal">
+    <div class="modal-box">
+      <div class="modal-title">Code d'accès VIP</div>
+      <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Entrez le code d'accès à 4 chiffres fourni par Kofi Duval :</p>
+      
+      <input type="password" id="accessCode" class="code-input" placeholder="••••" maxlength="4" inputmode="numeric" />
+      <div class="error-txt" id="codeErr">❌ Code incorrect ! Vérifiez le canal.</div>
+
+      <button class="btn-btn" onclick="validateCode()">Valider le Code</button>
+      <button class="btn-btn btn-sec" style="margin-top: 8px;" onclick="closeCodeModal()">Annuler</button>
+
+      <div class="auth-loader" id="authLoader">
+        <div style="color: var(--yellow); font-size: 12px; font-weight: 700;">Authentification auprès de BetAndYou...</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="authProgress"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- CONGOLESE NAMES & LIVE TICKER DATA ---
+    const congoleseStudents = [
+      { name: "Dieudonné M. (Masina)", win: "125 000 CDF" },
+      { name: "Jean-Pierre K. (Lemba)", win: "85 000 CDF" },
+      { name: "Patrick Mukamba (Gombe)", win: "210 000 CDF" },
+      { name: "Alphonse Banza (Matete)", win: "45 000 CDF" },
+      { name: "Christian Kabongo (Ngaliema)", win: "320 000 CDF" },
+      { name: "Serge Tshisekedi (Bandal)", win: "95 000 CDF" },
+      { name: "Junior Mbemba (Kintambo)", win: "160 000 CDF" },
+      { name: "Tresor Lukusa (Limete)", win: "280 000 CDF" },
+      { name: "Guy Kabamba (Lingwala)", win: "115 000 CDF" },
+      { name: "Fiston Mpoyi (Selembao)", win: "175 000 CDF" }
+    ];
+
+    let tickerIndex = 0;
+    const tickerNameEl = document.getElementById('ticker-name');
+    const tickerWinEl = document.getElementById('ticker-win');
+
+    setInterval(() => {
+      tickerIndex = (tickerIndex + 1) % congoleseStudents.length;
+      const item = congoleseStudents[tickerIndex];
+      tickerNameEl.textContent = item.name;
+      tickerWinEl.textContent = "+" + item.win;
+    }, 3500);
+
+    // --- NAVIGATION & AUTHENTICATION ---
+    const modal = document.getElementById('codeModal');
+    const codeInput = document.getElementById('accessCode');
+    const codeErr = document.getElementById('codeErr');
+    const authLoader = document.getElementById('authLoader');
+    const authProgress = document.getElementById('authProgress');
+
+    function openCodeModal() {
+      modal.classList.add('active');
+      codeInput.value = '';
+      codeErr.style.display = 'none';
+      authLoader.style.display = 'none';
+      setTimeout(() => codeInput.focus(), 200);
+    }
+
+    function closeCodeModal() {
+      modal.classList.remove('active');
+    }
+
+    function validateCode() {
+      const code = codeInput.value.trim();
+      
+      // Strict verification for code 2282
+      if (code === "2282") {
+        codeErr.style.display = 'none';
+        authLoader.style.display = 'block';
+        
+        let p = 0;
+        const interval = setInterval(() => {
+          p += 10;
+          authProgress.style.width = p + '%';
+          if (p >= 100) {
+            clearInterval(interval);
+            closeCodeModal();
+            document.getElementById('screen-auth').classList.remove('active');
+            document.getElementById('screen-main').classList.add('active');
+          }
+        }, 120);
+      } else {
+        codeErr.style.display = 'block';
+        codeInput.value = '';
+        codeInput.focus();
+      }
+    }
+
+    // --- PREDICTOR SCREEN LOGIC ---
+    let selectedGame = '';
+    const screenMain = document.getElementById('screen-main');
+    const screenPred = document.getElementById('screen-pred');
+    const predGameTitle = document.getElementById('pred-game-title');
+    
+    const termIdle = document.getElementById('term-idle');
+    const termLoader = document.getElementById('term-loader');
+    const termResult = document.getElementById('term-result');
+    const loaderTxt = document.getElementById('loader-txt');
+    const termProgress = document.getElementById('term-progress');
+
+    const betBox = document.getElementById('bet-box');
+    const betVal = document.getElementById('bet-val');
+    const btnStep1 = document.getElementById('btn-step1');
+    const btnStep2 = document.getElementById('btn-step2');
+
+    function selectGame(name, icon) {
+      selectedGame = name;
+      predGameTitle.innerHTML = `${icon} ${name}`;
+
+      // Reset predictor UI
+      termIdle.style.display = 'block';
+      termLoader.style.display = 'none';
+      termResult.style.display = 'none';
+      betBox.style.display = 'none';
+      
+      btnStep1.disabled = false;
+      btnStep2.disabled = true;
+
+      screenMain.classList.remove('active');
+      screenPred.classList.add('active');
+    }
+
+    function goBackMain() {
+      screenPred.classList.remove('active');
+      screenMain.classList.add('active');
+    }
+
+    // Step 1: Get Bet Size
+    function getBetSize() {
+      const allowedBets = [200, 250, 300, 350, 400, 450];
+      const randomBet = allowedBets[Math.floor(Math.random() * allowedBets.length)];
+
+      betVal.textContent = `${randomBet} CDF`;
+      betBox.style.display = 'block';
+
+      btnStep2.disabled = false;
+      termIdle.textContent = 'Taille du pari définie ! Cliquez sur "Obtenir Signal".';
+    }
+
+    // Step 2: Get Signal with analysis loader
+    function getSignal() {
+      btnStep1.disabled = true;
+      btnStep2.disabled = true;
+
+      termIdle.style.display = 'none';
+      termResult.style.display = 'none';
+      termLoader.style.display = 'block';
+
+      const steps = [
+        "Connexion à l'API BetAndYou...",
+        "Contournement de l'algorithme...",
+        "Analyse de la clef de hachage...",
+        "Calcul du signal exact..."
+      ];
+
+      let prog = 0;
+      termProgress.style.width = '0%';
+      loaderTxt.textContent = steps[0];
+
+      const interval = setInterval(() => {
+        prog += 5;
+        termProgress.style.width = prog + '%';
+
+        if (prog === 25) loaderTxt.textContent = steps[1];
+        if (prog === 50) loaderTxt.textContent = steps[2];
+        if (prog === 75) loaderTxt.textContent = steps[3];
+
+        if (prog >= 100) {
+          clearInterval(interval);
+          renderPrediction();
+        }
+      }, 90);
+    }
+
+    function renderPrediction() {
+      termLoader.style.display = 'none';
+      termResult.style.display = 'block';
+
+      btnStep1.disabled = false;
+      btnStep2.disabled = false;
+
+      termResult.innerHTML = '';
+
+      if (selectedGame === 'Aviator' || selectedGame === 'Crash') {
+        const coeff = (Math.random() * (4.80 - 1.35) + 1.35).toFixed(2);
+        termResult.innerHTML = `<div class="res-coeff">x${coeff}</div>`;
+      } 
+      else if (selectedGame === 'Mines') {
+        let gridHtml = '<div class="mines-grid">';
+        let safeIndexes = [];
+        while(safeIndexes.length < 4) {
+          let idx = Math.floor(Math.random() * 25);
+          if(!safeIndexes.includes(idx)) safeIndexes.push(idx);
+        }
+        for (let i = 0; i < 25; i++) {
+          if (safeIndexes.includes(i)) {
+            gridHtml += `<div class="mine-cell safe">★</div>`;
+          } else {
+            gridHtml += `<div class="mine-cell"></div>`;
+          }
+        }
+        gridHtml += '</div>';
+        termResult.innerHTML = gridHtml;
+      }
+      else if (selectedGame === 'Apple of Fortune') {
+        // Логика Apple of Fortune: Сетка снизу вверх
+        // Строка 1 (низ): 3 яблока
+        // Строка 2: 3 яблока
+        // Строка 3: 2 яблока
+        // Строка 4: 2 яблока
+        // Строка 5 (верх): 1 яблоко
+        
+        let gridHtml = '<div style="display:flex; flex-direction:column-reverse; gap:4px; align-items:center;">';
+        const safeCounts = [3, 3, 2, 2, 1]; // количество безопасных яблок по строкам
+        
+        for(let row = 0; row < 5; row++) {
+          let rowSafeCount = safeCounts[row];
+          let safeIdx = [];
+          
+          while(safeIdx.length < rowSafeCount) {
+            let rnd = Math.floor(Math.random() * 5);
+            if(!safeIdx.includes(rnd)) safeIdx.push(rnd);
+          }
+          
+          gridHtml += '<div style="display:flex; gap:4px;">';
+          for (let col = 0; col < 5; col++) {
+            if (safeIdx.includes(col)) {
+              gridHtml += `<div class="mine-cell apple-safe">🍏</div>`;
+            } else {
+              gridHtml += `<div class="mine-cell"></div>`;
+            }
+          }
+          gridHtml += '</div>';
+        }
+        gridHtml += '</div>';
+        termResult.innerHTML = gridHtml;
+      }
+      else if (selectedGame === 'Penalty') {
+        const dirs = [
+          "🎯 Lucarne Gauche", "🎯 Lucarne Droite", 
+          "⚽ Bas Gauche", "⚽ Bas Droit", "⬇️ Centre-Droit"
+        ];
+        const res = dirs[Math.floor(Math.random() * dirs.length)];
+        termResult.innerHTML = `<div class="penalty-txt">${res}</div>`;
+      }
+      else if (selectedGame === 'Chicken Road') {
+        // Логика для Chicken Road: указываем количество прыжков
+        const jumps = Math.floor(Math.random() * 3) + 3; // От 3 до 5 прыжков
+        termResult.innerHTML = `
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Nombres de sauts sécurisés :</div>
+          <div class="res-coeff" style="font-size: 34px; margin-bottom: 5px;">🐔 ${jumps} SAUTS</div>
+          <div class="penalty-txt" style="font-size: 14px;">Encaissez vos gains après le saut n°${jumps} !</div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
