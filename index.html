@@ -1,729 +1,3121 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>AI Predictor by Kofi Duval | BetAndYou RDC</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0a0a0c;
-      --card: #141418;
-      --card-inner: #1c1c22;
-      --yellow: #f7c600;
-      --yellow-glow: rgba(247, 198, 0, 0.25);
-      --text: #ffffff;
-      --muted: #8e8e9e;
-      --border: rgba(247, 198, 0, 0.15);
-      --green: #0cb86a;
-      --red: #ff3333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0B0E14">
+<meta name="description" content="Kofi Duval VIP Predictor Pro pour BetAndYou — Signaux IA & Calculateur de Gestion de Mise.">
+<title>Kofi Duval — VIP Predictor BetAndYou Pro</title>
+<style>
+/* ==========================================================================
+   DESIGN SYSTEM & CSS RESET
+   ========================================================================== */
+:root {
+  --bg-primary: #0A0D14;
+  --bg-card: #131722;
+  --bg-card-hover: #1A2030;
+  --bg-surface: #1B2232;
+  --bg-surface-light: #263045;
+  
+  --gold-main: #FFD700;
+  --gold-glow: rgba(255, 215, 0, 0.4);
+  --gold-gradient: linear-gradient(135deg, #FFE066 0%, #F59E0B 50%, #D97706 100%);
+  
+  --green-main: #00E676;
+  --green-glow: rgba(0, 230, 118, 0.4);
+  --green-gradient: linear-gradient(135deg, #69F0AE 0%, #00E676 50%, #00B248 100%);
+  
+  --cyan-main: #00E5FF;
+  --cyan-glow: rgba(0, 229, 255, 0.4);
+  --cyan-gradient: linear-gradient(135deg, #00E5FF 0%, #0091EA 100%);
+  
+  --red-main: #FF3366;
+  --red-glow: rgba(255, 51, 102, 0.4);
+  
+  --purple-main: #A855F7;
+  
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(255, 215, 0, 0.35);
+  --border-cyan: rgba(0, 229, 255, 0.35);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border-color);
+  --shadow-gold: 0 8px 25px -4px rgba(245, 158, 11, 0.45);
+  --shadow-cyan: 0 8px 25px -4px rgba(0, 229, 255, 0.45);
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-      background-image: radial-gradient(circle at 50% 0%, #2a2200 0%, var(--bg) 70%);
-    }
+html {
+  -webkit-text-size-adjust: 100%;
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100%;
+}
 
-    .wrap {
-      width: 100%;
-      max-width: 440px;
-    }
+body {
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(0, 229, 255, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  line-height: 1.4;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px var(--yellow-glow);
-      position: relative;
-      overflow: hidden;
-    }
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--bg-surface-light); border-radius: 3px; }
 
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 4px;
-      background: linear-gradient(90deg, transparent, var(--yellow), transparent);
-    }
+/* UTILITIES */
+.hidden { display: none !important; }
+.text-gold { color: var(--gold-main); }
+.text-green { color: var(--green-main); }
+.text-cyan { color: var(--cyan-main); }
+.text-red { color: var(--red-main); }
 
-    /* SCREENS */
-    .screen { display: none; animation: fadeIn 0.4s ease forwards; }
-    .screen.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* ==========================================================================
+   HEADER & NAVBAR
+   ========================================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(10, 13, 20, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+}
 
-    /* AUTH SCREEN */
-    .auth-header {
-      text-align: center;
-      margin-top: 10px;
-      margin-bottom: 25px;
-    }
-    .auth-badge {
-      display: inline-block;
-      background: rgba(247, 198, 0, 0.1);
-      color: var(--yellow);
-      border: 1px solid var(--yellow);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-    }
-    .auth-title {
-      font-size: 24px;
-      font-weight: 900;
-      text-transform: uppercase;
-      color: var(--text);
-      line-height: 1.2;
-    }
-    .auth-title span { color: var(--yellow); }
-    .auth-subtitle {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 6px;
-      font-weight: 600;
-    }
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
 
-    .avatar-box {
-      width: 90px;
-      height: 90px;
-      margin: 20px auto;
-      border-radius: 50%;
-      border: 2px solid var(--yellow);
-      box-shadow: 0 0 20px var(--yellow-glow);
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-    }
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--gold-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 15px var(--gold-glow);
+  flex-shrink: 0;
+}
 
-    /* MODAL ACCESS CODE */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .modal-box {
-      background: var(--card);
-      border: 1px solid var(--yellow);
-      border-radius: 16px;
-      padding: 24px 20px;
-      width: min(380px, 90%);
-      text-align: center;
-      box-shadow: 0 10px 30px var(--yellow-glow);
-    }
-    .modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--yellow);
-      margin-bottom: 15px;
-    }
-    .code-input {
-      width: 100%;
-      background: var(--card-inner);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--yellow);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 24px;
-      text-align: center;
-      letter-spacing: 6px;
-      padding: 12px;
-      border-radius: 8px;
-      outline: none;
-      margin-bottom: 10px;
-    }
-    .code-input:focus {
-      border-color: var(--yellow);
-      box-shadow: 0 0 10px var(--yellow-glow);
-    }
-    .error-txt {
-      color: var(--red);
-      font-size: 12px;
-      font-weight: 700;
-      display: none;
-      margin-bottom: 12px;
-    }
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
 
-    /* BUTTONS */
-    .btn-btn {
-      width: 100%;
-      background: var(--yellow);
-      color: #000;
-      border: none;
-      padding: 16px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 900;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 4px 15px var(--yellow-glow);
-      transition: all 0.15s ease;
-      margin-top: 10px;
-    }
-    .btn-btn:active { transform: scale(0.98); }
-    .btn-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.brand-title {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-    .btn-sec {
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: none;
-    }
-    .btn-sec:hover { border-color: var(--yellow); color: var(--yellow); }
+.brand-badge {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #FF3366, #FF9900);
+  color: #fff;
+  letter-spacing: 0.5px;
+}
 
-    /* AUTH LOADING */
-    .auth-loader {
-      display: none;
-      margin-top: 15px;
-      text-align: center;
-    }
-    .progress-bar-wrap {
-      width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin-top: 10px;
-    }
-    .progress-bar-fill {
-      width: 0%; height: 100%; background: var(--yellow); transition: width 0.1s linear;
-    }
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
-    /* MAIN MENU HEADER */
-    .main-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .brand-title {
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--yellow);
-      text-transform: uppercase;
-    }
-    .status-online {
-      font-size: 11px;
-      color: var(--green);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .status-online::before {
-      content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%;
-      box-shadow: 0 0 6px var(--green); animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--green-main);
+  box-shadow: 0 0 8px var(--green-main);
+  animation: pulseLive 1.5s infinite;
+}
 
-    /* FLOATING LIVE WINNERS TICKER */
-    .live-ticker {
-      background: rgba(12, 184, 106, 0.08);
-      border: 1px solid rgba(12, 184, 106, 0.3);
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      animation: flashBorder 3s infinite;
-    }
-    .ticker-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .ticker-tag {
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .ticker-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .ticker-win {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--yellow);
-      font-family: 'Share Tech Mono', monospace;
-    }
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
 
-    /* GAME GRID */
-    .game-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .game-card {
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .game-card:hover, .game-card:active {
-      border-color: var(--yellow);
-      background: rgba(247, 198, 0, 0.05);
-      transform: translateY(-2px);
-    }
-    .game-icon { font-size: 32px; margin-bottom: 8px; }
-    .game-name { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #fff; }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    /* PREDICTOR SCREEN */
-    .back-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
+/* BANKROLL SUMMARY PILL */
+.bankroll-pill {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-    .pred-header {
-      text-align: center;
-      font-size: 20px;
-      font-weight: 900;
-      text-transform: uppercase;
-      color: var(--yellow);
-      margin-bottom: 20px;
-    }
+.bankroll-pill:hover {
+  border-color: var(--gold-main);
+  background: var(--bg-surface);
+}
 
-    .display-terminal {
-      background: #050507;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      min-height: 130px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      margin-bottom: 15px;
-      font-family: 'Share Tech Mono', monospace;
-      text-align: center;
-    }
+.bankroll-text {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 1.1;
+}
 
-    .bet-box {
-      background: var(--card-inner);
-      border: 1px solid rgba(247, 198, 0, 0.2);
-      border-radius: 10px;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 15px;
-      display: none;
-    }
-    .bet-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
-    .bet-val { font-size: 18px; color: var(--yellow); font-weight: 900; font-family: 'Share Tech Mono', monospace; margin-top: 2px; }
+.bankroll-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+}
 
-    /* RESULTS VISUALS */
-    .res-coeff { font-size: 42px; font-weight: 900; color: var(--yellow); text-shadow: 0 0 15px var(--yellow-glow); }
-    
-    .mines-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 150px; margin: 0 auto;
-    }
-    .mine-cell {
-      width: 26px; height: 26px; background: #1a1a20; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px;
-    }
-    .mine-cell.safe { background: var(--yellow); color: #000; font-weight: bold; box-shadow: 0 0 8px var(--yellow); }
+.bankroll-val {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--gold-main);
+  font-variant-numeric: tabular-nums;
+}
 
-    .apple-safe { background: rgba(12, 184, 106, 0.2); border: 1px solid #0cb86a; box-shadow: 0 0 8px rgba(12, 184, 106, 0.4); }
+.btn-nav-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
 
-    .penalty-txt { font-size: 18px; color: var(--yellow); font-weight: bold; }
+.btn-nav-icon:hover {
+  color: #fff;
+  border-color: var(--border-active);
+  background: var(--bg-surface);
+}
 
-    .footer-txt {
-      text-align: center;
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 20px;
-      font-weight: 600;
-    }
-  </style>
+/* ==========================================================================
+   VIEW CONTAINERS
+   ========================================================================== */
+.view-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ==========================================================================
+   VIEW 1: PRIVATE VIP LOGIN (ALWAYS STARTS HERE)
+   ========================================================================== */
+#view-login {
+  min-height: calc(100vh - 70px);
+  min-height: calc(100dvh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 36px 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: var(--gold-gradient);
+  box-shadow: 0 10px 30px var(--gold-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.login-card p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 26px;
+}
+
+.pin-input-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.pin-input {
+  width: 100%;
+  height: 56px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 14px;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.pin-input:focus {
+  border-color: var(--gold-main);
+  box-shadow: 0 0 20px var(--gold-glow);
+  background: var(--bg-primary);
+}
+
+.pin-input::placeholder {
+  letter-spacing: 3px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.error-msg {
+  color: var(--red-main);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 54px;
+  background: var(--gold-gradient);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   VIEW 2: LOBBY & BANKROLL CALCULATOR
+   ========================================================================== */
+.hero-card {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(19, 23, 34, 0.95) 100%);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.hero-info h2 {
+  font-size: 19px;
+  font-weight: 900;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-info p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  max-width: 480px;
+}
+
+.hero-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.hero-badge .val {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--green-main);
+}
+
+.hero-badge .lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   BANKROLL / BET CALCULATOR MODULE (10 BETS RULE)
+   ========================================================================== */
+.calculator-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.calculator-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--cyan-gradient);
+}
+
+.calc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.calc-title {
+  font-size: 15px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calc-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--cyan-main);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.deposit-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.deposit-input-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.deposit-input {
+  width: 100%;
+  height: 50px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 0 65px 0 16px;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.2s;
+}
+
+.deposit-input:focus {
+  border-color: var(--cyan-main);
+  box-shadow: 0 0 15px var(--cyan-glow);
+  background: var(--bg-primary);
+}
+
+.currency-tag {
+  position: absolute;
+  right: 14px;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--gold-main);
+  pointer-events: none;
+}
+
+.quick-deposit-presets {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+}
+.quick-deposit-presets::-webkit-scrollbar { display: none; }
+
+.btn-deposit-chip {
+  padding: 6px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.btn-deposit-chip:hover, .btn-deposit-chip.active {
+  border-color: var(--cyan-main);
+  color: #fff;
+  background: var(--bg-surface-light);
+}
+
+/* RESULTS GRID OF THE CALCULATOR */
+.calc-results-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-color);
+  padding: 14px;
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 580px) {
+  .calc-results-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.calc-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.calc-stat-lbl {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.calc-stat-val {
+  font-size: 18px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-stat-val.highlight {
+  color: var(--green-main);
+}
+
+.calc-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   GAMES GRID & POPULAR LABELS / BADGES (5 EXCLUSIVE GAMES)
+   ========================================================================== */
+.section-title {
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 600px) {
+  .games-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+.game-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cyan-main);
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.8), 0 0 20px var(--cyan-glow);
+}
+
+.game-card:active {
+  transform: scale(0.97);
+}
+
+/* BADGES STYLES */
+.game-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.game-tag.tag-populaire {
+  background: linear-gradient(135deg, #FF3366 0%, #FF6B8B 100%);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 0 10px rgba(255, 51, 102, 0.45);
+}
+
+.game-tag.tag-vip {
+  background: linear-gradient(135deg, #00E676 0%, #00B248 100%);
+  color: #000000;
+  border: none;
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.45);
+}
+
+.game-tag.tag-recommande {
+  background: linear-gradient(135deg, #FFE066 0%, #F59E0B 100%);
+  color: #000000;
+  border: none;
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
+}
+
+.game-tag.tag-precision {
+  background: linear-gradient(135deg, #00E5FF 0%, #0091EA 100%);
+  color: #000000;
+  border: none;
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.45);
+}
+
+.game-tag.tag-nouveau {
+  background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.45);
+}
+
+.game-icon-box {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.05);
+  transition: all 0.2s;
+}
+
+.game-card:hover .game-icon-box {
+  transform: scale(1.08);
+  border-color: var(--cyan-main);
+}
+
+.game-name {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.game-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.game-meta span {
+  color: var(--green-main);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   VIEW 3: SIGNAL ROOM & VISUAL GAME ARENA
+   ========================================================================= */
+.game-room-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.btn-back-lobby {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.btn-back-lobby:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-cyan);
+}
+
+.game-room-title {
+  font-size: 16px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signal-status-pill {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 230, 118, 0.15);
+  border: 1px solid var(--green-main);
+  color: var(--green-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signal-status-pill.scanning {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--cyan-main);
+  color: var(--cyan-main);
+}
+
+/* SIGNAL DISPLAY ARENA */
+.game-stage-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   GAME 1: AVIATOR SIGNAL ARENA (DYNAMIC ANIMATED RADAR & FLIGHT)
+   ========================================================================== */
+.aviator-history-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  scrollbar-width: none;
+}
+.aviator-history-bar::-webkit-scrollbar { display: none; }
+
+.history-pill {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.history-pill.blue { color: #60A5FA; border-color: rgba(96, 165, 250, 0.4); }
+.history-pill.purple { color: #C084FC; border-color: rgba(192, 132, 252, 0.4); }
+.history-pill.gold { color: #FCD34D; border-color: rgba(252, 211, 77, 0.6); background: rgba(245, 158, 11, 0.15); }
+
+.aviator-canvas-container {
+  flex: 1;
+  min-height: 260px;
+  position: relative;
+  border-radius: var(--radius-md);
+  background: radial-gradient(circle at 75% 25%, #182236 0%, #0a0e18 70%);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+#aviator-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.aviator-center-overlay {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aviator-mult-display {
+  font-size: 58px;
+  font-weight: 900;
+  color: var(--gold-main);
+  text-shadow: 0 0 30px var(--gold-glow);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -1px;
+  transition: transform 0.1s;
+}
+
+.aviator-mult-display.locked {
+  color: #22C55E;
+  text-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+  animation: aviatorLockedPulse 1s infinite alternate;
+}
+
+@keyframes aviatorLockedPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.aviator-status-badge {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border-color);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+.aviator-status-badge.in-flight {
+  border-color: #FF3366;
+  color: #FF6B8B;
+  box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
+}
+
+.aviator-status-badge.locked {
+  border-color: #22C55E;
+  color: #4ADE80;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+/* ==========================================================================
+   GAME 2: APPLE OF FORTUNE SIGNAL ARENA
+   ========================================================================== */
+.apple-tower-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.apple-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.apple-row.active-signal {
+  border-color: var(--cyan-main);
+  background: rgba(0, 229, 255, 0.1);
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+
+.apple-row-mult {
+  width: 58px;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--gold-main);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.apple-cells {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.apple-cell {
+  flex: 1;
+  aspect-ratio: 1.3;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.apple-cell.signal-safe {
+  border-color: var(--green-main);
+  background: rgba(0, 230, 118, 0.25);
+  box-shadow: 0 0 14px var(--green-glow);
+  transform: scale(1.08);
+  animation: pulseSignal 1.5s infinite alternate;
+}
+
+@keyframes pulseSignal {
+  0% { transform: scale(1.04); }
+  100% { transform: scale(1.12); }
+}
+
+/* ==========================================================================
+   GAME 3: MINES SIGNAL ARENA
+   ========================================================================== */
+.mines-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 8px 14px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mines-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 380px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mine-tile {
+  aspect-ratio: 1;
+  background: linear-gradient(145deg, #1A2130 0%, #121824 100%);
+  border: 2px solid #283248;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.mine-tile.signal-diamond {
+  border-color: var(--green-main);
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.35) 0%, #121824 80%);
+  box-shadow: 0 0 18px var(--green-glow);
+  animation: pulseDiamond 1.2s infinite alternate;
+}
+
+@keyframes pulseDiamond {
+  0% { transform: scale(1); border-color: var(--green-main); }
+  100% { transform: scale(1.08); border-color: var(--gold-main); }
+}
+
+/* ==========================================================================
+   GAME 4: PENALTY SIGNAL ARENA
+   ========================================================================== */
+.penalty-arena {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.penalty-goal-box {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(180deg, #091A13 0%, #0E2B1E 100%);
+  border: 8px solid #E2E8F0;
+  border-bottom: 2px solid #22C55E;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+  overflow: hidden;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.goalkeeper {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 58px;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.7));
+}
+
+.penalty-targets-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  padding: 10px;
+  z-index: 3;
+}
+
+.penalty-target {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.penalty-target.signal-lock {
+  background: rgba(0, 230, 118, 0.35);
+  border: 2px solid var(--green-main);
+  box-shadow: 0 0 20px var(--green-glow);
+  color: #fff;
+  font-size: 24px;
+  animation: lockPulse 1s infinite alternate;
+}
+
+@keyframes lockPulse {
+  0% { transform: scale(0.96); border-color: var(--green-main); }
+  100% { transform: scale(1.04); border-color: var(--gold-main); }
+}
+
+/* ==========================================================================
+   GAME 5: CHICKEN ROAD (DYNAMIC & INTERACTIVE HIGHWAY REPLICA)
+   ========================================================================== */
+.chicken-game-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  background: #23262E;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.chicken-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #181A20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+}
+
+.chicken-logo-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.chicken-logo-tag .egg-o {
+  color: #FF3366;
+}
+
+.chicken-live-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.chicken-live-win {
+  color: var(--green-main);
+  font-weight: 800;
+}
+
+.chicken-highway {
+  position: relative;
+  background: #3F424B;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  padding: 12px 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.highway-lanes {
+  display: flex;
+  width: 100%;
+  min-width: 560px;
+  height: 100%;
+  position: relative;
+}
+
+.highway-lane {
+  flex: 1;
+  position: relative;
+  border-right: 2px dashed rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  min-height: 215px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.highway-lane:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.highway-lane:last-child {
+  border-right: none;
+}
+
+/* Lane Number Indicator */
+.lane-idx-tag {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Obstacles: Barrier & Trucks */
+.road-obstacle-top {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.road-obstacle-bottom {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Yellow Caution Barrier */
+.road-barrier {
+  width: 54px;
+  height: 20px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #F59E0B,
+    #F59E0B 8px,
+    #1E293B 8px,
+    #1E293B 16px
+  );
+  border: 2px solid #E2E8F0;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+.road-barrier::before, .road-barrier::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  width: 4px;
+  height: 6px;
+  background: #64748B;
+}
+.road-barrier::before { left: 4px; }
+.road-barrier::after { right: 4px; }
+
+/* Construction Truck */
+.truck-vehicle {
+  width: 48px;
+  height: 64px;
+  background: #F59E0B;
+  border: 2px solid #0F172A;
+  border-radius: 8px 8px 4px 4px;
+  position: relative;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: vehicleRumble 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes vehicleRumble {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+.truck-windshield {
+  width: 36px;
+  height: 18px;
+  background: #38BDF8;
+  border: 2px solid #0F172A;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+.truck-grille {
+  width: 30px;
+  height: 10px;
+  background: #1E293B;
+  border-radius: 2px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.truck-headlight {
+  width: 5px;
+  height: 5px;
+  background: #FEF08A;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #FEF08A;
+}
+.truck-roof-tag {
+  position: absolute;
+  top: -12px;
+  background: #0F172A;
+  color: #F59E0B;
+  font-size: 8px;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid #F59E0B;
+}
+
+/* White & Green Van */
+.van-vehicle {
+  width: 44px;
+  height: 56px;
+  background: #F8FAFC;
+  border: 2px solid #0F172A;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.van-roof-green {
+  width: 36px;
+  height: 10px;
+  background: #22C55E;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+.van-windshield {
+  width: 32px;
+  height: 14px;
+  background: #94A3B8;
+  border: 2px solid #0F172A;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+/* Sewer Manhole Grate Disc */
+.manhole-disc {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #6B7280 0%, #374151 60%, #1F2937 100%);
+  border: 4px solid #4B5563;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.manhole-disc:hover {
+  transform: scale(1.06);
+}
+
+.manhole-disc::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.manhole-multiplier {
+  font-size: 13px;
+  font-weight: 900;
+  color: #F3F4F6;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  font-variant-numeric: tabular-nums;
+  z-index: 2;
+}
+
+.manhole-slits {
+  position: absolute;
+  inset: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4px,
+    rgba(0, 0, 0, 0.45) 4px,
+    rgba(0, 0, 0, 0.45) 6px
+  );
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+/* Completed Step: Gold Coin */
+.manhole-disc.step-gold {
+  background: radial-gradient(circle at 35% 35%, #FDE047 0%, #EAB308 60%, #CA8A04 100%);
+  border-color: #FEF08A;
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.6);
+}
+.manhole-disc.step-gold .manhole-multiplier {
+  color: #713F12;
+  text-shadow: none;
+}
+
+/* Chicken Character Box */
+.chicken-character-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chicken-character-box.hopping {
+  animation: chickenJump 0.35s ease-out;
+}
+
+@keyframes chickenJump {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-24px) scale(1.18); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.chicken-svg-avatar {
+  width: 58px;
+  height: 58px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+  animation: chickenIdle 0.7s infinite alternate ease-in-out;
+}
+
+@keyframes chickenIdle {
+  0% { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(-4px) rotate(2deg); }
+}
+
+.chicken-mult-pill {
+  background: #2563EB;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 3px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.6);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  animation: pillPulse 1.5s infinite alternate;
+}
+
+@keyframes pillPulse {
+  0% { transform: scale(1); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.6); }
+  100% { transform: scale(1.06); box-shadow: 0 0 16px rgba(59, 130, 246, 0.9); }
+}
+
+/* AI Predictor Highlight Target */
+.manhole-disc.signal-predicted-safe {
+  border-color: var(--green-main);
+  box-shadow: 0 0 20px var(--green-glow), inset 0 0 10px rgba(0, 230, 118, 0.4);
+  animation: safePulse 1.2s infinite alternate;
+}
+.manhole-disc.signal-predicted-safe .manhole-multiplier {
+  color: var(--green-main);
+}
+
+.manhole-disc.signal-target-cashout {
+  border-color: var(--gold-main);
+  box-shadow: 0 0 25px var(--gold-glow), inset 0 0 14px rgba(255, 215, 0, 0.6);
+  animation: targetPulse 1s infinite alternate;
+}
+.manhole-disc.signal-target-cashout .manhole-multiplier {
+  color: var(--gold-main);
+}
+
+@keyframes safePulse {
+  0% { transform: scale(1); border-color: var(--green-main); }
+  100% { transform: scale(1.08); border-color: #69F0AE; }
+}
+
+@keyframes targetPulse {
+  0% { transform: scale(1); border-color: var(--gold-main); }
+  100% { transform: scale(1.12); border-color: #FFF; }
+}
+
+/* Bottom Controls */
+.chicken-controls-bar {
+  background: #181A20;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chicken-diff-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chicken-diff-tabs {
+  display: flex;
+  background: #0E1014;
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+}
+
+.btn-diff-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-diff-tab.active {
+  background: #2A303C;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.chicken-hit-chance {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.chicken-action-btns-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+}
+
+.btn-chicken-cashout {
+  background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.35);
+  transition: all 0.15s;
+}
+
+.btn-chicken-cashout:active {
+  transform: scale(0.98);
+}
+
+.btn-chicken-go {
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
+  transition: all 0.15s;
+}
+
+.btn-chicken-go:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   INTEGRATED BET RECOMMENDATION BOX (INSIDE GAME ROOM)
+   ========================================================================== */
+.bet-advisory-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.advisory-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.advisory-lbl {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.advisory-amount {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--gold-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.advisory-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.btn-change-deposit {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--cyan-main);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.btn-change-deposit:hover {
+  border-color: var(--cyan-main);
+  background: var(--bg-surface-light);
+}
+
+/* SIGNAL GENERATOR ACTION PANEL */
+.signal-controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-generate-signal {
+  width: 100%;
+  height: 56px;
+  background: var(--cyan-gradient);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-cyan);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-generate-signal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+  box-shadow: none;
+}
+
+.btn-generate-signal:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.signal-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+/* ==========================================================================
+   CHANGE DEPOSIT MODAL
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-card);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-title {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATION
+   ========================================================================== */
+.toast-box {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-surface);
+  border: 1px solid var(--gold-main);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px var(--gold-glow);
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.toast-box.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
 </head>
 <body>
 
-  <div class="wrap">
-    <div class="card">
-      
-      <div id="screen-auth" class="screen active">
-        <div class="auth-header">
-          <div class="auth-badge">BetAndYou Private Script</div>
-          <div class="auth-title">AI Predictor <br>by <span>Kofi Duval</span></div>
-          <div class="auth-subtitle">Système de prédiction algorithmique • CDF</div>
-        </div>
-
-        <div class="avatar-box">👑</div>
-
-        <button class="btn-btn" onclick="openCodeModal()">S'authentifier</button>
-
-        <div class="footer-txt">
-          Justice pour Masina • Exclusif BetAndYou 🇨🇩
-        </div>
-      </div>
-
-      <div id="screen-main" class="screen">
-        <div class="main-top">
-          <div class="brand-title">Kofi Duval AI</div>
-          <div class="status-online">Serveur BetAndYou OK</div>
-        </div>
-
-        <div class="live-ticker">
-          <div class="ticker-info">
-            <div class="ticker-tag">🔴 ÉTUDIANTS / EN DIRECT</div>
-            <div class="ticker-name" id="ticker-name">Jean-Pierre M.</div>
-          </div>
-          <div class="ticker-win" id="ticker-win">+125 000 CDF</div>
-        </div>
-
-        <div class="game-grid">
-          <div class="game-card" onclick="selectGame('Aviator', '✈️')">
-            <div class="game-icon">✈️</div>
-            <div class="game-name">Aviator</div>
-          </div>
-          <div class="game-card" onclick="selectGame('Crash', '💥')">
-            <div class="game-icon">💥</div>
-            <div class="game-name">Crash</div>
-          </div>
-          <div class="game-card" onclick="selectGame('Mines', '💎')">
-            <div class="game-icon">💎</div>
-            <div class="game-name">Mines</div>
-          </div>
-          <div class="game-card" onclick="selectGame('Penalty', '⚽')">
-            <div class="game-icon">⚽</div>
-            <div class="game-name">Penalty</div>
-          </div>
-          <div class="game-card" onclick="selectGame('Chicken Road', '🐔')">
-            <div class="game-icon">🐔</div>
-            <div class="game-name">Chicken</div>
-          </div>
-          <div class="game-card" onclick="selectGame('Apple of Fortune', '🍏')">
-            <div class="game-icon">🍏</div>
-            <div class="game-name">Apple</div>
-          </div>
-        </div>
-
-        <div class="footer-txt">
-          Devise : CDF • Algorithme Interne Contourné
-        </div>
-      </div>
-
-      <div id="screen-pred" class="screen">
-        <button class="back-btn" onclick="goBackMain()">← Menu Principal</button>
-        
-        <div class="pred-header" id="pred-game-title">✈️ Aviator</div>
-
-        <div class="display-terminal" id="terminal">
-          <div id="term-idle" style="color: var(--muted); font-size: 13px;">
-            Cliquez sur "Obtenir Taille du Pari" pour commencer l'analyse.
-          </div>
-          <div id="term-loader" style="display: none; width: 100%;">
-            <div id="loader-txt" style="color: var(--yellow); font-size: 13px;">Connexion au serveur...</div>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="term-progress"></div></div>
-          </div>
-          <div id="term-result" style="display: none; width: 100%;"></div>
-        </div>
-
-        <div class="bet-box" id="bet-box">
-          <div class="bet-lbl">Taille du pari recommandée (Dépôt min 5000 CDF)</div>
-          <div class="bet-val" id="bet-val">250 CDF</div>
-        </div>
-
-        <button class="btn-btn btn-sec" id="btn-step1" onclick="getBetSize()">1. Obtenir Taille du Pari</button>
-        <button class="btn-btn" id="btn-step2" disabled onclick="getSignal()">2. Obtenir Signal</button>
-
-        <div class="footer-txt">
-          Garantie 10 tours avec dépôt de 5000 CDF
-        </div>
-      </div>
-
+<!-- ================================
+     NAVIGATION BAR
+     ================================ -->
+<header class="navbar">
+  <div class="brand-wrapper" id="nav-brand-btn">
+    <div class="brand-icon">👑</div>
+    <div class="brand-text">
+      <div class="brand-title">KOFI DUVAL <span class="brand-badge">BETANDYOU</span></div>
+      <div class="brand-subtitle"><span class="live-dot"></span> <span id="online-counter">1,438</span> en ligne</div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="codeModal">
-    <div class="modal-box">
-      <div class="modal-title">Code d'accès VIP</div>
-      <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Entrez le code d'accès à 4 chiffres fourni par Kofi Duval :</p>
-      
-      <input type="password" id="accessCode" class="code-input" placeholder="••••" maxlength="4" inputmode="numeric" />
-      <div class="error-txt" id="codeErr">❌ Code incorrect ! Vérifiez le canal.</div>
-
-      <button class="btn-btn" onclick="validateCode()">Valider le Code</button>
-      <button class="btn-btn btn-sec" style="margin-top: 8px;" onclick="closeCodeModal()">Annuler</button>
-
-      <div class="auth-loader" id="authLoader">
-        <div style="color: var(--yellow); font-size: 12px; font-weight: 700;">Authentification auprès de BetAndYou...</div>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="authProgress"></div></div>
+  <div class="navbar-actions" id="navbar-actions">
+    <!-- Bankroll Indicator -->
+    <div class="bankroll-pill" id="btn-quick-deposit" title="Modifier le capital de départ BetAndYou">
+      <span style="font-size: 15px;">💼</span>
+      <div class="bankroll-text">
+        <span class="bankroll-label">Dépôt BetAndYou</span>
+        <span class="bankroll-val" id="header-deposit-display">50,000 CDF</span>
       </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <button class="btn-nav-icon" id="btn-toggle-sound" title="Activer / Couper le son" type="button">🔊</button>
+
+    <!-- Logout Button -->
+    <button class="btn-nav-icon" id="btn-logout" title="Déconnexion" type="button">🚪</button>
+  </div>
+</header>
+
+<!-- ================================
+     VIEW 1 — PRIVATE VIP AUTHENTICATION (START PAGE)
+     ================================ -->
+<section id="view-login" class="view-container">
+  <div class="login-card">
+    <div class="login-logo">👑</div>
+    <h1>Accès VIP BetAndYou</h1>
+    <p>Entrez votre code d'accès personnel pour débloquer les algorithmes BetAndYou.</p>
+    
+    <form id="login-form" style="width: 100%;" autocomplete="off">
+      <div class="pin-input-group">
+        <input 
+          id="pin-input" 
+          class="pin-input" 
+          type="password" 
+          inputmode="numeric" 
+          placeholder="••••" 
+          maxlength="8" 
+          aria-label="Code PIN VIP"
+          autofocus
+          required
+        >
+        <p id="login-error" class="error-msg" aria-live="polite"></p>
+      </div>
+
+      <button id="btn-login-submit" class="btn-primary" type="submit">
+        <span>Connexion Sécurisée</span> ➔
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ================================
+     VIEW 2 — DASHBOARD & BET CALCULATOR
+     ================================ -->
+<section id="view-lobby" class="view-container hidden">
+  <!-- Hero Info -->
+  <div class="hero-card">
+    <div class="hero-info">
+      <h2>🚀 Intelligence Artificielle BetAndYou v4.8</h2>
+      <p>Synchronisation en temps réel avec les serveurs BetAndYou. Précision algorithmique certifiée.</p>
+    </div>
+    <div class="hero-badge">
+      <div class="val">98.6%</div>
+      <div class="lbl">Taux de Réussite</div>
     </div>
   </div>
 
-  <script>
-    // --- CONGOLESE NAMES & LIVE TICKER DATA ---
-    const congoleseStudents = [
-      { name: "Dieudonné M. (Masina)", win: "125 000 CDF" },
-      { name: "Jean-Pierre K. (Lemba)", win: "85 000 CDF" },
-      { name: "Patrick Mukamba (Gombe)", win: "210 000 CDF" },
-      { name: "Alphonse Banza (Matete)", win: "45 000 CDF" },
-      { name: "Christian Kabongo (Ngaliema)", win: "320 000 CDF" },
-      { name: "Serge Tshisekedi (Bandal)", win: "95 000 CDF" },
-      { name: "Junior Mbemba (Kintambo)", win: "160 000 CDF" },
-      { name: "Tresor Lukusa (Limete)", win: "280 000 CDF" },
-      { name: "Guy Kabamba (Lingwala)", win: "115 000 CDF" },
-      { name: "Fiston Mpoyi (Selembao)", win: "175 000 CDF" }
+  <!-- BANKROLL & BET SIZE CALCULATOR -->
+  <div class="calculator-card">
+    <div class="calc-header">
+      <div class="calc-title">
+        <span>🧮</span> Calculateur de Mise BetAndYou
+      </div>
+      <div class="calc-badge">Règle de Sécurité: 10 Mises</div>
+    </div>
+
+    <div class="deposit-input-wrapper">
+      <div class="deposit-input-box">
+        <input 
+          class="deposit-input" 
+          id="deposit-input" 
+          type="number" 
+          value="50000" 
+          min="1000" 
+          step="1000"
+          aria-label="Montant du dépôt BetAndYou"
+        >
+        <span class="currency-tag">CDF</span>
+      </div>
+    </div>
+
+    <!-- Quick Deposit Chips -->
+    <div class="quick-deposit-presets">
+      <button class="btn-deposit-chip" data-deposit="10000" type="button">10,000 CDF</button>
+      <button class="btn-deposit-chip" data-deposit="25000" type="button">25,000 CDF</button>
+      <button class="btn-deposit-chip active" data-deposit="50000" type="button">50,000 CDF</button>
+      <button class="btn-deposit-chip" data-deposit="100000" type="button">100,000 CDF</button>
+      <button class="btn-deposit-chip" data-deposit="250000" type="button">250,000 CDF</button>
+      <button class="btn-deposit-chip" data-deposit="500000" type="button">500,000 CDF</button>
+    </div>
+
+    <!-- Live Computed Bet Metrics -->
+    <div class="calc-results-grid">
+      <div class="calc-stat-item">
+        <span class="calc-stat-lbl">Mise Recommandée (1/10)</span>
+        <span class="calc-stat-val highlight" id="calc-bet-size">5,000 CDF</span>
+      </div>
+      <div class="calc-stat-item">
+        <span class="calc-stat-lbl">Capacité de Sécurité</span>
+        <span class="calc-stat-val text-cyan">10 Signaux</span>
+      </div>
+      <div class="calc-stat-item">
+        <span class="calc-stat-lbl">Objectif Journalier (+50%)</span>
+        <span class="calc-stat-val text-gold" id="calc-target-profit">+25,000 CDF</span>
+      </div>
+    </div>
+
+    <div class="calc-hint">
+      <span>🛡️</span> La mise de 10% protège votre capital BetAndYou et garantit 10 tentatives complètes.
+    </div>
+  </div>
+
+  <!-- Games Section (5 Games Exclusive to BetAndYou) -->
+  <div class="section-title">
+    <span>Sélectionnez votre jeu</span>
+    <span style="font-size: 12px; color: var(--text-muted);">5 Algorithmes BetAndYou Prêts</span>
+  </div>
+
+  <div class="games-grid" id="lobby-games-grid">
+    <!-- Game 1: Aviator -->
+    <div class="game-card" data-game-id="aviator">
+      <span class="game-tag tag-populaire">🔥 POPULAIRE</span>
+      <div class="game-icon-box">✈️</div>
+      <div class="game-name">Aviator / Crash</div>
+      <div class="game-meta">Signal: <span>Trajectoire Exacte</span></div>
+    </div>
+
+    <!-- Game 2: Apple of Fortune -->
+    <div class="game-card" data-game-id="apple">
+      <span class="game-tag tag-vip">💎 TOP VIP</span>
+      <div class="game-icon-box">🍎</div>
+      <div class="game-name">Apple of Fortune</div>
+      <div class="game-meta">Signal: <span>Chemin 10 Étages</span></div>
+    </div>
+
+    <!-- Game 3: Mines -->
+    <div class="game-card" data-game-id="mines">
+      <span class="game-tag tag-recommande">⭐ RECOMMANDÉ</span>
+      <div class="game-icon-box">💣</div>
+      <div class="game-name">Mines 5x5</div>
+      <div class="game-meta">Signal: <span>5 Diamants Sûrs</span></div>
+    </div>
+
+    <!-- Game 4: Penalty Shootout -->
+    <div class="game-card" data-game-id="penalty">
+      <span class="game-tag tag-precision">🎯 PRÉCISION 99%</span>
+      <div class="game-icon-box">⚽</div>
+      <div class="game-name">Penalty Shootout</div>
+      <div class="game-meta">Signal: <span>Cible Gardien</span></div>
+    </div>
+
+    <!-- Game 5: Chicken Road -->
+    <div class="game-card" data-game-id="chicken">
+      <span class="game-tag tag-nouveau">⚡ NOUVEAU</span>
+      <div class="game-icon-box">🐔</div>
+      <div class="game-name">Chicken Road</div>
+      <div class="game-meta">Signal: <span>Traversée Sans Braise</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     VIEW 3 — SIGNAL ROOM
+     ================================ -->
+<section id="view-game-room" class="view-container hidden">
+  <div class="game-room-header">
+    <button class="btn-back-lobby" id="btn-back-to-lobby" type="button">
+      ⬅ Retour aux Algorithmes
+    </button>
+    <div class="game-room-title" id="room-game-title">
+      ✈️ Aviator
+    </div>
+    <div class="signal-status-pill" id="signal-status-pill">
+      <span>🟢</span> Signal Prêt
+    </div>
+  </div>
+
+  <!-- Active Game Stage (Signal Arena) -->
+  <div class="game-stage-wrapper" id="game-stage-wrapper">
+    <div id="game-stage-content"></div>
+  </div>
+
+  <!-- Integrated Bet Size Advisory for this Game -->
+  <div class="bet-advisory-box">
+    <div class="advisory-left">
+      <span class="advisory-lbl">Mise à placer pour ce signal</span>
+      <span class="advisory-amount" id="advisory-bet-display">5,000 CDF</span>
+      <span class="advisory-sub" id="advisory-deposit-sub">Sur la base de votre dépôt BetAndYou de 50,000 CDF (1/10)</span>
+    </div>
+    <button class="btn-change-deposit" id="btn-open-deposit-modal" type="button">
+      Ajuster Dépôt
+    </button>
+  </div>
+
+  <!-- Signal Trigger Controls -->
+  <div class="signal-controls-panel">
+    <button class="btn-generate-signal" id="btn-generate-signal-action" type="button">
+      <span>⚡</span> OBTENIR LE SIGNAL SUIVANT
+    </button>
+    <div class="signal-meta-bar">
+      <span>Précision BetAndYou: <strong class="text-green" id="signal-acc-lbl">98.8%</strong></span>
+      <span id="signal-cooldown-lbl">Actualisation immédiate</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     CHANGE DEPOSIT MODAL
+     ================================ -->
+<div class="modal-backdrop hidden" id="deposit-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">💼 Ajuster votre Dépôt BetAndYou</div>
+      <button class="btn-close-modal" id="btn-close-deposit-modal" type="button">✕</button>
+    </div>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+      La mise recommandée est automatiquement recalculée pour diviser votre capital en <strong>10 mises sécurisées</strong> sur BetAndYou.
+    </p>
+
+    <div class="deposit-input-box" style="margin-bottom: 16px;">
+      <input 
+        class="deposit-input" 
+        id="modal-deposit-input" 
+        type="number" 
+        value="50000" 
+        min="1000" 
+        step="1000"
+      >
+      <span class="currency-tag">CDF</span>
+    </div>
+
+    <div class="quick-deposit-presets" style="margin-bottom: 20px;">
+      <button class="btn-deposit-chip" data-modal-dep="10000" type="button">10k</button>
+      <button class="btn-deposit-chip" data-modal-dep="25000" type="button">25k</button>
+      <button class="btn-deposit-chip" data-modal-dep="50000" type="button">50k</button>
+      <button class="btn-deposit-chip" data-modal-dep="100000" type="button">100k</button>
+      <button class="btn-deposit-chip" data-modal-dep="250000" type="button">250k</button>
+      <button class="btn-deposit-chip" data-modal-dep="500000" type="button">500k</button>
+    </div>
+
+    <button class="btn-primary" id="btn-save-deposit-modal" type="button">
+      Valider et Recalculer
+    </button>
+  </div>
+</div>
+
+<!-- ================================
+     TOAST NOTIFICATIONS
+     ================================ -->
+<div class="toast-box" id="toast-notification">
+  <span id="toast-icon">✨</span>
+  <span id="toast-msg">Bienvenue sur BetAndYou VIP Predictor</span>
+</div>
+
+<!-- ==========================================================================
+     JAVASCRIPT LOGIC & PROCEDURAL WEB AUDIO SYNTHESIZER
+     ========================================================================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ==========================================================================
+  // 1. PROCEDURAL AUDIO SYNTHESIZER (0 KB Bandwidth)
+  // ==========================================================================
+  var audioCtx = null;
+  var isSoundEnabled = true;
+
+  function initAudio() {
+    if (!audioCtx) {
+      var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) audioCtx = new AudioContextClass();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  var SoundFx = {
+    click: function() {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch(e){}
+    },
+
+    step: function() {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(880, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e){}
+    },
+
+    planeDrone: function(freqStart, freqEnd, duration) {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freqStart || 120, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freqEnd || 280, audioCtx.currentTime + duration);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e){}
+    },
+
+    radarScan: function() {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch(e){}
+    },
+
+    signalSuccess: function() {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var notes = [587.33, 739.99, 880.00, 1174.66];
+        notes.forEach(function(freq, idx) {
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.05);
+          gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.05 + 0.25);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.05);
+          osc.stop(audioCtx.currentTime + idx * 0.05 + 0.25);
+        });
+      } catch(e){}
+    },
+
+    error: function() {
+      if (!isSoundEnabled || !audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      } catch(e){}
+    }
+  };
+
+  // ==========================================================================
+  // 2. STATE & STORAGE
+  // ==========================================================================
+  var State = {
+    isLoggedIn: false,
+    deposit: 50000, // Total Bankroll in CDF
+    currentGame: 'aviator',
+    chickenDifficulty: 'Medium',
+    chickenStep: 3,
+    chickenTarget: 4,
+    chickenTrucks: [3, 5],
+    chickenVans: [1, 6],
+    chickenBarriers: [0, 4],
+    chickenAnimTimer: null,
+    aviatorAnimId: null,
+    isCoolingDown: false
+  };
+
+  function getRecommendedBet() {
+    var raw = Math.floor(State.deposit / 10);
+    return Math.max(500, Math.round(raw / 100) * 100);
+  }
+
+  try {
+    var savedDep = localStorage.getItem('kd_deposit');
+    if (savedDep) State.deposit = parseInt(savedDep, 10);
+  } catch(e){}
+
+  function saveState() {
+    try {
+      localStorage.setItem('kd_deposit', State.deposit.toString());
+    } catch(e){}
+  }
+
+  function formatMoney(amount) {
+    return amount.toLocaleString('fr-FR') + ' CDF';
+  }
+
+  function updateCalculatorUI() {
+    var recBet = getRecommendedBet();
+    var targetProfit = Math.floor(State.deposit * 0.5);
+
+    var headerEl = document.getElementById('header-deposit-display');
+    if (headerEl) headerEl.textContent = formatMoney(State.deposit);
+
+    var betSizeEl = document.getElementById('calc-bet-size');
+    var targetEl = document.getElementById('calc-target-profit');
+    var inputEl = document.getElementById('deposit-input');
+    if (betSizeEl) betSizeEl.textContent = formatMoney(recBet);
+    if (targetEl) targetEl.textContent = '+' + formatMoney(targetProfit);
+    if (inputEl && document.activeElement !== inputEl) inputEl.value = State.deposit;
+
+    var advisoryBetEl = document.getElementById('advisory-bet-display');
+    var advisorySubEl = document.getElementById('advisory-deposit-sub');
+    if (advisoryBetEl) advisoryBetEl.textContent = formatMoney(recBet);
+    if (advisorySubEl) advisorySubEl.textContent = 'Sur la base de votre dépôt BetAndYou de ' + formatMoney(State.deposit) + ' (1/10)';
+
+    saveState();
+  }
+
+  function showToast(msg, icon) {
+    var toast = document.getElementById('toast-notification');
+    var msgEl = document.getElementById('toast-msg');
+    var iconEl = document.getElementById('toast-icon');
+    if (!toast || !msgEl) return;
+
+    msgEl.textContent = msg;
+    iconEl.textContent = icon || '✨';
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2800);
+  }
+
+  setInterval(function() {
+    var onlineEl = document.getElementById('online-counter');
+    if (onlineEl) {
+      var current = parseInt(onlineEl.textContent.replace(/\D/g, ''), 10) || 1438;
+      var change = Math.floor(Math.random() * 7) - 3;
+      var newVal = Math.max(1200, current + change);
+      onlineEl.textContent = newVal.toLocaleString('fr-FR');
+    }
+  }, 4000);
+
+  // ==========================================================================
+  // 3. NAVIGATION & VIEWS
+  // ==========================================================================
+  var viewLogin = document.getElementById('view-login');
+  var viewLobby = document.getElementById('view-lobby');
+  var viewGameRoom = document.getElementById('view-game-room');
+
+  function showView(viewId) {
+    viewLogin.classList.add('hidden');
+    viewLobby.classList.add('hidden');
+    viewGameRoom.classList.add('hidden');
+
+    if (viewId === 'login') {
+      viewLogin.classList.remove('hidden');
+      setTimeout(function() { pinInput.focus(); }, 100);
+    } else if (viewId === 'lobby') {
+      viewLobby.classList.remove('hidden');
+    } else if (viewId === 'room') {
+      viewGameRoom.classList.remove('hidden');
+    }
+  }
+
+  var pinInput = document.getElementById('pin-input');
+  var loginForm = document.getElementById('login-form');
+  var loginError = document.getElementById('login-error');
+
+  function doLogin(pin) {
+    initAudio();
+    if (pin === '2282') {
+      State.isLoggedIn = true;
+      loginError.textContent = '';
+      showToast('Authentification BetAndYou VIP Réussie', '👑');
+      SoundFx.signalSuccess();
+      showView('lobby');
+      pinInput.value = '';
+    } else {
+      SoundFx.error();
+      loginError.textContent = 'Code d\'accès incorrect.';
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  }
+
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    doLogin(pinInput.value.trim());
+  });
+
+  pinInput.addEventListener('input', function() {
+    var val = pinInput.value.trim();
+    if (val === '2282') {
+      doLogin(val);
+    }
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', function() {
+    SoundFx.click();
+    State.isLoggedIn = false;
+    pinInput.value = '';
+    showView('login');
+    showToast('Déconnexion effectuée', '🚪');
+  });
+
+  document.getElementById('nav-brand-btn').addEventListener('click', function() {
+    SoundFx.click();
+    if (State.isLoggedIn) showView('lobby');
+  });
+
+  document.getElementById('btn-back-to-lobby').addEventListener('click', function() {
+    SoundFx.click();
+    cleanupActiveGame();
+    showView('lobby');
+  });
+
+  var btnToggleSound = document.getElementById('btn-toggle-sound');
+  btnToggleSound.addEventListener('click', function() {
+    initAudio();
+    isSoundEnabled = !isSoundEnabled;
+    btnToggleSound.textContent = isSoundEnabled ? '🔊' : '🔇';
+    showToast(isSoundEnabled ? 'Son activé' : 'Son coupé', isSoundEnabled ? '🔊' : '🔇');
+  });
+
+  // ==========================================================================
+  // 4. BANKROLL / DEPOSIT CALCULATOR LOGIC
+  // ==========================================================================
+  var depositInput = document.getElementById('deposit-input');
+  depositInput.addEventListener('input', function() {
+    var val = parseInt(depositInput.value, 10);
+    if (!isNaN(val) && val > 0) {
+      State.deposit = val;
+      updateCalculatorUI();
+      highlightActivePreset(val);
+    }
+  });
+
+  function highlightActivePreset(val) {
+    document.querySelectorAll('.btn-deposit-chip').forEach(function(btn) {
+      var d = parseInt(btn.getAttribute('data-deposit') || btn.getAttribute('data-modal-dep'), 10);
+      if (d === val) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+
+  document.querySelectorAll('.btn-deposit-chip[data-deposit]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      initAudio();
+      SoundFx.click();
+      var val = parseInt(this.getAttribute('data-deposit'), 10);
+      State.deposit = val;
+      updateCalculatorUI();
+      highlightActivePreset(val);
+    });
+  });
+
+  var depositModal = document.getElementById('deposit-modal');
+  var modalDepositInput = document.getElementById('modal-deposit-input');
+
+  function openDepositModal() {
+    initAudio();
+    SoundFx.click();
+    modalDepositInput.value = State.deposit;
+    depositModal.classList.remove('hidden');
+  }
+
+  document.getElementById('btn-quick-deposit').addEventListener('click', openDepositModal);
+  document.getElementById('btn-open-deposit-modal').addEventListener('click', openDepositModal);
+
+  document.getElementById('btn-close-deposit-modal').addEventListener('click', function() {
+    SoundFx.click();
+    depositModal.classList.add('hidden');
+  });
+
+  document.querySelectorAll('.btn-deposit-chip[data-modal-dep]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      initAudio();
+      SoundFx.click();
+      var val = parseInt(this.getAttribute('data-modal-dep'), 10);
+      modalDepositInput.value = val;
+    });
+  });
+
+  document.getElementById('btn-save-deposit-modal').addEventListener('click', function() {
+    initAudio();
+    var val = parseInt(modalDepositInput.value, 10);
+    if (!isNaN(val) && val > 0) {
+      State.deposit = val;
+      updateCalculatorUI();
+      highlightActivePreset(val);
+      SoundFx.signalSuccess();
+      showToast('Dépôt BetAndYou: ' + formatMoney(val), '💼');
+    }
+    depositModal.classList.add('hidden');
+  });
+
+  // ==========================================================================
+  // 5. SIGNAL SUITE & GAME ARENAS
+  // ==========================================================================
+  var stageContent = document.getElementById('game-stage-content');
+  var roomGameTitle = document.getElementById('room-game-title');
+  var signalStatusPill = document.getElementById('signal-status-pill');
+  var btnGenerateSignal = document.getElementById('btn-generate-signal-action');
+  var signalAccLbl = document.getElementById('signal-acc-lbl');
+  var signalCooldownLbl = document.getElementById('signal-cooldown-lbl');
+
+  var activeGameCleanup = null;
+  function cleanupActiveGame() {
+    if (State.aviatorAnimId) {
+      cancelAnimationFrame(State.aviatorAnimId);
+      State.aviatorAnimId = null;
+    }
+    if (State.chickenAnimTimer) {
+      clearInterval(State.chickenAnimTimer);
+      State.chickenAnimTimer = null;
+    }
+    if (activeGameCleanup) {
+      activeGameCleanup();
+      activeGameCleanup = null;
+    }
+  }
+
+  document.getElementById('lobby-games-grid').addEventListener('click', function(e) {
+    var card = e.target.closest('.game-card');
+    if (!card) return;
+    initAudio();
+    SoundFx.click();
+    var gameId = card.getAttribute('data-game-id');
+    launchGameSignal(gameId);
+  });
+
+  function launchGameSignal(gameId) {
+    cleanupActiveGame();
+    State.currentGame = gameId;
+    showView('room');
+    updateCalculatorUI();
+
+    if (gameId === 'aviator') renderAviatorSignal();
+    else if (gameId === 'apple') renderAppleSignal();
+    else if (gameId === 'mines') renderMinesSignal();
+    else if (gameId === 'penalty') renderPenaltySignal();
+    else if (gameId === 'chicken') renderChickenSignal();
+  }
+
+  btnGenerateSignal.addEventListener('click', function() {
+    if (State.isCoolingDown) return;
+    initAudio();
+    SoundFx.radarScan();
+
+    State.isCoolingDown = true;
+    btnGenerateSignal.disabled = true;
+    btnGenerateSignal.innerHTML = '<span>⏳</span> SYNCHRONISATION BETANDYOU...';
+    signalStatusPill.className = 'signal-status-pill scanning';
+    signalStatusPill.innerHTML = '<span>🔄</span> Calcul du Signal...';
+
+    setTimeout(function() {
+      var acc = (97.6 + Math.random() * 2.2).toFixed(1);
+      signalAccLbl.textContent = acc + '%';
+      signalStatusPill.className = 'signal-status-pill';
+      signalStatusPill.innerHTML = '<span>🟢</span> Signal Validé BetAndYou';
+
+      if (State.currentGame === 'aviator') {
+        renderAviatorSignal(true);
+      } else if (State.currentGame === 'apple') {
+        SoundFx.signalSuccess();
+        renderAppleSignal(true);
+        showToast('Nouveau Signal Apple of Fortune Prêt !', '🎯');
+      } else if (State.currentGame === 'mines') {
+        SoundFx.signalSuccess();
+        renderMinesSignal(true);
+        showToast('Nouveau Signal Mines 5x5 Prêt !', '🎯');
+      } else if (State.currentGame === 'penalty') {
+        SoundFx.signalSuccess();
+        renderPenaltySignal(true);
+        showToast('Nouveau Signal Penalty Prêt !', '🎯');
+      } else if (State.currentGame === 'chicken') {
+        generateRandomChickenSignal();
+      }
+
+      var timeLeft = 3;
+      var cdInterval = setInterval(function() {
+        signalCooldownLbl.textContent = 'Prochain signal dans 00:0' + timeLeft;
+        timeLeft--;
+        if (timeLeft < 0) {
+          clearInterval(cdInterval);
+          State.isCoolingDown = false;
+          btnGenerateSignal.disabled = false;
+          btnGenerateSignal.innerHTML = '<span>⚡</span> OBTENIR LE SIGNAL SUIVANT';
+          signalCooldownLbl.textContent = 'Actualisation disponible';
+        }
+      }, 1000);
+    }, 800);
+  });
+
+  // ==========================================================================
+  // GAME 1: AVIATOR SIGNAL (FULL 60FPS CANVAS FLIGHT ANIMATION)
+  // ==========================================================================
+  function renderAviatorSignal(isUpdate) {
+    roomGameTitle.innerHTML = '✈️ Aviator BetAndYou';
+
+    if (!isUpdate || !document.getElementById('aviator-canvas')) {
+      stageContent.innerHTML = 
+        '<div class="aviator-history-bar" id="aviator-history"></div>' +
+        '<div class="aviator-canvas-container">' +
+          '<canvas id="aviator-canvas"></canvas>' +
+          '<div class="aviator-center-overlay">' +
+            '<div class="aviator-mult-display" id="aviator-pred-mult">1.00x</div>' +
+            '<div class="aviator-status-badge in-flight" id="aviator-flight-status">DÉCOLLAGE DU SIGNAL...</div>' +
+          '</div>' +
+        '</div>';
+
+      var historyBar = document.getElementById('aviator-history');
+      var past = ['2.14x', '1.85x', '14.20x', '3.10x', '1.08x', '5.40x', '8.90x'];
+      past.forEach(function(p) {
+        var v = parseFloat(p);
+        var cls = v >= 10 ? 'gold' : (v >= 2 ? 'purple' : 'blue');
+        historyBar.innerHTML += '<span class="history-pill ' + cls + '">' + p + '</span>';
+      });
+    }
+
+    var multEl = document.getElementById('aviator-pred-mult');
+    var statusEl = document.getElementById('aviator-flight-status');
+    var canvas = document.getElementById('aviator-canvas');
+    if (!canvas) return;
+
+    var ctx = canvas.getContext('2d');
+    var rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    // Pick random realistic target coefficient
+    var targetMult = (1.45 + Math.random() * 3.8).toFixed(2);
+    if (Math.random() < 0.2) targetMult = (6.5 + Math.random() * 16.0).toFixed(2);
+    var targetMultFloat = parseFloat(targetMult);
+
+    if (State.aviatorAnimId) {
+      cancelAnimationFrame(State.aviatorAnimId);
+      State.aviatorAnimId = null;
+    }
+
+    statusEl.className = 'aviator-status-badge in-flight';
+    statusEl.textContent = 'VOL DU SIGNAL EN COURS...';
+    multEl.className = 'aviator-mult-display';
+
+    var startTime = performance.now();
+    var duration = 2200; // 2.2 seconds smooth flight
+    SoundFx.planeDrone(110, 260, 2.2);
+
+    // Particle spark system for exhaust
+    var particles = [];
+
+    function animateFlight(now) {
+      var elapsed = now - startTime;
+      var rawProgress = Math.min(1, elapsed / duration);
+      // Ease out cubic
+      var progress = 1 - Math.pow(1 - rawProgress, 2.5);
+
+      var curMultVal = 1.00 + (targetMultFloat - 1.00) * progress;
+      multEl.textContent = curMultVal.toFixed(2) + 'x';
+
+      var w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // 1. Draw animated grid
+      var gridOffset = (now * 0.03) % 40;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (var x = gridOffset; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (var y = 0; y < h; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // 2. Trajectory points
+      var startX = 20, startY = h - 25;
+      var maxTargetX = w - 60;
+      var maxTargetY = 45;
+
+      var currentTipX = startX + (maxTargetX - startX) * progress;
+      var currentTipY = startY - (startY - maxTargetY) * Math.pow(progress, 1.4);
+      var controlX = startX + (currentTipX - startX) * 0.45;
+      var controlY = startY;
+
+      // 3. Fill Gradient under the flight curve
+      var fillGrad = ctx.createLinearGradient(0, currentTipY, 0, h);
+      fillGrad.addColorStop(0, 'rgba(255, 51, 102, 0.38)');
+      fillGrad.addColorStop(0.6, 'rgba(255, 51, 102, 0.12)');
+      fillGrad.addColorStop(1, 'rgba(255, 51, 102, 0.0)');
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.quadraticCurveTo(controlX, controlY, currentTipX, currentTipY);
+      ctx.lineTo(currentTipX, startY);
+      ctx.closePath();
+      ctx.fillStyle = fillGrad;
+      ctx.fill();
+
+      // 4. Draw Glowing Flight Line
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.quadraticCurveTo(controlX, controlY, currentTipX, currentTipY);
+      ctx.strokeStyle = '#FF3366';
+      ctx.lineWidth = 4;
+      ctx.shadowColor = '#FF3366';
+      ctx.shadowBlur = 14;
+      ctx.stroke();
+      ctx.shadowBlur = 0; // reset
+
+      // 5. Jet particles
+      if (rawProgress < 1 && Math.random() < 0.6) {
+        particles.push({
+          x: currentTipX - 10,
+          y: currentTipY + 4,
+          vx: -(1 + Math.random() * 2),
+          vy: (Math.random() - 0.5) * 1.5,
+          alpha: 1,
+          size: 2 + Math.random() * 3
+        });
+      }
+
+      for (var p = particles.length - 1; p >= 0; p--) {
+        var pt = particles[p];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.alpha -= 0.04;
+        if (pt.alpha <= 0) {
+          particles.splice(p, 1);
+        } else {
+          ctx.fillStyle = 'rgba(255, 170, 0, ' + pt.alpha + ')';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 6. Draw Red Airplane Sprite at tip
+      ctx.save();
+      ctx.translate(currentTipX, currentTipY);
+      var angle = -0.22 - (progress * 0.12);
+      ctx.rotate(angle);
+
+      // Shadow
+      ctx.shadowColor = 'rgba(0,0,0,0.6)';
+      ctx.shadowBlur = 8;
+
+      // Plane Body
+      ctx.fillStyle = '#EF4444';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 18, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Wings
+      ctx.fillStyle = '#DC2626';
+      ctx.beginPath();
+      ctx.moveTo(-2, 0); ctx.lineTo(-10, -18); ctx.lineTo(-2, -18); ctx.lineTo(6, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-2, 0); ctx.lineTo(-10, 18); ctx.lineTo(-2, 18); ctx.lineTo(6, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Tail
+      ctx.fillStyle = '#B91C1C';
+      ctx.beginPath();
+      ctx.moveTo(-14, 0); ctx.lineTo(-20, -10); ctx.lineTo(-16, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Windshield
+      ctx.fillStyle = '#38BDF8';
+      ctx.beginPath();
+      ctx.ellipse(6, -2, 5, 2.5, -0.1, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Spinning Propeller
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1.5;
+      var propPhase = (now * 0.05) % Math.PI;
+      ctx.beginPath();
+      ctx.moveTo(18, -Math.sin(propPhase) * 8);
+      ctx.lineTo(18, Math.sin(propPhase) * 8);
+      ctx.stroke();
+
+      ctx.restore();
+
+      if (rawProgress < 1) {
+        State.aviatorAnimId = requestAnimationFrame(animateFlight);
+      } else {
+        // Flight Complete / Signal Locked!
+        multEl.textContent = targetMult + 'x';
+        multEl.className = 'aviator-mult-display locked';
+        statusEl.className = 'aviator-status-badge locked';
+        statusEl.textContent = '🎯 CIBLE VERROUILLÉE : ' + targetMult + 'x';
+        SoundFx.signalSuccess();
+
+        // Update history bar
+        var historyBar = document.getElementById('aviator-history');
+        if (historyBar) {
+          var cls = targetMultFloat >= 10 ? 'gold' : (targetMultFloat >= 2 ? 'purple' : 'blue');
+          var newPill = document.createElement('span');
+          newPill.className = 'history-pill ' + cls;
+          newPill.textContent = targetMult + 'x';
+          historyBar.insertBefore(newPill, historyBar.firstChild);
+        }
+
+        var cashoutCDF = Math.floor(getRecommendedBet() * targetMultFloat);
+        showToast('Signal Aviator Validé: ' + targetMult + 'x (' + formatMoney(cashoutCDF) + ')', '✈️');
+      }
+    }
+
+    State.aviatorAnimId = requestAnimationFrame(animateFlight);
+  }
+
+  // ==========================================================================
+  // GAME 2: APPLE OF FORTUNE SIGNAL
+  // ==========================================================================
+  function renderAppleSignal(isUpdate) {
+    roomGameTitle.innerHTML = '🍎 Apple of Fortune BetAndYou';
+    var multipliers = [
+      '1.23x', '1.54x', '1.93x', '2.41x', '4.02x', 
+      '6.71x', '11.18x', '27.92x', '69.80x', '341.00x'
     ];
 
-    let tickerIndex = 0;
-    const tickerNameEl = document.getElementById('ticker-name');
-    const tickerWinEl = document.getElementById('ticker-win');
+    var towerHtml = '<div class="apple-tower-container">';
+    for (var r = 9; r >= 0; r--) {
+      var isTargetRow = r < 4;
+      var safeCol = Math.floor(Math.random() * 5);
 
-    setInterval(() => {
-      tickerIndex = (tickerIndex + 1) % congoleseStudents.length;
-      const item = congoleseStudents[tickerIndex];
-      tickerNameEl.textContent = item.name;
-      tickerWinEl.textContent = "+" + item.win;
-    }, 3500);
+      towerHtml += 
+        '<div class="apple-row ' + (isTargetRow ? 'active-signal' : '') + '">' +
+          '<div class="apple-row-mult">' + multipliers[r] + '</div>' +
+          '<div class="apple-cells">';
+      for (var c = 0; c < 5; c++) {
+        var isSafe = isTargetRow && (c === safeCol);
+        towerHtml += '<div class="apple-cell ' + (isSafe ? 'signal-safe' : '') + '">' + (isSafe ? '🍎' : '🍏') + '</div>';
+      }
+      towerHtml += '</div></div>';
+    }
+    towerHtml += '</div>';
+    stageContent.innerHTML = towerHtml;
+  }
 
-    // --- NAVIGATION & AUTHENTICATION ---
-    const modal = document.getElementById('codeModal');
-    const codeInput = document.getElementById('accessCode');
-    const codeErr = document.getElementById('codeErr');
-    const authLoader = document.getElementById('authLoader');
-    const authProgress = document.getElementById('authProgress');
-
-    function openCodeModal() {
-      modal.classList.add('active');
-      codeInput.value = '';
-      codeErr.style.display = 'none';
-      authLoader.style.display = 'none';
-      setTimeout(() => codeInput.focus(), 200);
+  // ==========================================================================
+  // GAME 3: MINES 5x5 SIGNAL
+  // ==========================================================================
+  function renderMinesSignal(isUpdate) {
+    roomGameTitle.innerHTML = '💣 Mines BetAndYou 5x5';
+    var safeSpots = [];
+    while (safeSpots.length < 5) {
+      var idx = Math.floor(Math.random() * 25);
+      if (safeSpots.indexOf(idx) === -1) safeSpots.push(idx);
     }
 
-    function closeCodeModal() {
-      modal.classList.remove('active');
+    var html = 
+      '<div class="mines-top-bar">' +
+        '<span>Mines Détectées: <strong class="text-red">3</strong></span>' +
+        '<span>Diamants Sûrs: <strong class="text-cyan">5</strong></span>' +
+        '<span>Cote Recommandée: <strong class="text-gold">2.45x</strong></span>' +
+      '</div>' +
+      '<div class="mines-grid">';
+
+    for (var i = 0; i < 25; i++) {
+      var isDiamond = safeSpots.indexOf(i) !== -1;
+      html += '<div class="mine-tile ' + (isDiamond ? 'signal-diamond' : '') + '">' + (isDiamond ? '💎' : '') + '</div>';
+    }
+    html += '</div>';
+    stageContent.innerHTML = html;
+  }
+
+  // ==========================================================================
+  // GAME 4: PENALTY SHOOTOUT SIGNAL
+  // ==========================================================================
+  function renderPenaltySignal(isUpdate) {
+    roomGameTitle.innerHTML = '⚽ Penalty BetAndYou';
+    var targetSpot = Math.floor(Math.random() * 6);
+    var spotNames = ['Haut-Gauche', 'Haut-Centre', 'Haut-Droite', 'Bas-Gauche', 'Bas-Centre', 'Bas-Droite'];
+
+    stageContent.innerHTML = 
+      '<div class="penalty-arena">' +
+        '<div class="penalty-goal-box">' +
+          '<div class="goalkeeper">🧤</div>' +
+          '<div class="penalty-targets-layer">';
+
+    var targetsHtml = '';
+    for (var i = 0; i < 6; i++) {
+      var isLock = i === targetSpot;
+      targetsHtml += '<div class="penalty-target ' + (isLock ? 'signal-lock' : '') + '">' + (isLock ? '🎯' : '') + '</div>';
     }
 
-    function validateCode() {
-      const code = codeInput.value.trim();
-      
-      // Strict verification for code 2282
-      if (code === "2282") {
-        codeErr.style.display = 'none';
-        authLoader.style.display = 'block';
-        
-        let p = 0;
-        const interval = setInterval(() => {
-          p += 10;
-          authProgress.style.width = p + '%';
-          if (p >= 100) {
-            clearInterval(interval);
-            closeCodeModal();
-            document.getElementById('screen-auth').classList.remove('active');
-            document.getElementById('screen-main').classList.add('active');
-          }
-        }, 120);
+    stageContent.innerHTML += targetsHtml + 
+          '</div>' +
+        '</div>' +
+        '<div style="margin-top: 14px; font-size: 15px; font-weight: 800; text-align: center;">' +
+          'Zone Faible du Gardien: <strong class="text-green">' + spotNames[targetSpot] + '</strong>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // ==========================================================================
+  // GAME 5: CHICKEN ROAD (AUTHENTIC ENGINE WITH RANDOM TARGET COEFFICIENTS)
+  // ==========================================================================
+  var ChickenDifficultyConfig = {
+    'Easy': {
+      mults: ['1.18x', '1.45x', '1.82x', '2.30x', '2.95x', '3.80x', '5.00x', '6.80x'],
+      hitChance: '8.2%'
+    },
+    'Medium': {
+      mults: ['1.42x', '2.15x', '3.10x', '4.11x', '4.64x', '5.39x', '6.50x', '8.36x'],
+      hitChance: '14.8%'
+    },
+    'Hard': {
+      mults: ['1.60x', '2.65x', '4.50x', '7.80x', '14.00x', '26.00x', '50.00x', '100.00x'],
+      hitChance: '24.5%'
+    },
+    'Hardcore': {
+      mults: ['2.10x', '4.60x', '10.50x', '24.00x', '58.00x', '145.00x', '380.00x', '1000.00x'],
+      hitChance: '38.0%'
+    }
+  };
+
+  function randomizeChickenHazards(safeTargetIndex, totalLanes) {
+    var trucks = [], vans = [], barriers = [];
+    for (var i = 0; i < totalLanes; i++) {
+      if (i === safeTargetIndex) continue;
+      var rnd = Math.random();
+      if (rnd < 0.22 && trucks.length < 2) trucks.push(i);
+      else if (rnd < 0.44 && vans.length < 2) vans.push(i);
+      else if (rnd < 0.62 && barriers.length < 2) barriers.push(i);
+    }
+    State.chickenTrucks = trucks;
+    State.chickenVans = vans;
+    State.chickenBarriers = barriers;
+  }
+
+  function generateRandomChickenSignal() {
+    if (State.chickenAnimTimer) {
+      clearInterval(State.chickenAnimTimer);
+      State.chickenAnimTimer = null;
+    }
+
+    var diff = State.chickenDifficulty || 'Medium';
+    var cfg = ChickenDifficultyConfig[diff];
+    var maxSteps = cfg.mults.length;
+
+    var randomDestination = Math.floor(Math.random() * (maxSteps - 1)) + 1;
+    State.chickenTarget = randomDestination;
+    randomizeChickenHazards(randomDestination, maxSteps);
+
+    State.chickenStep = 0;
+    renderChickenSignal(true);
+    SoundFx.step();
+
+    var currentHop = 0;
+    State.chickenAnimTimer = setInterval(function() {
+      currentHop++;
+      State.chickenStep = currentHop;
+      renderChickenSignal(true);
+      SoundFx.step();
+
+      if (currentHop >= randomDestination) {
+        clearInterval(State.chickenAnimTimer);
+        State.chickenAnimTimer = null;
+        SoundFx.signalSuccess();
+        var finalMult = cfg.mults[randomDestination];
+        var finalMultNum = parseFloat(finalMult.replace('x', ''));
+        var cashoutCDF = Math.floor(getRecommendedBet() * finalMultNum);
+        showToast('Signal Validé: ' + finalMult + ' (' + formatMoney(cashoutCDF) + ')', '🎯');
+      }
+    }, 220);
+  }
+
+  function renderChickenSignal(isUpdate) {
+    roomGameTitle.innerHTML = '🐔 Chicken Road BetAndYou';
+
+    var diff = State.chickenDifficulty || 'Medium';
+    var cfg = ChickenDifficultyConfig[diff];
+    var currentStep = State.chickenStep;
+    var targetStep = State.chickenTarget;
+    var currentMult = cfg.mults[currentStep] || cfg.mults[0];
+    var targetMult = cfg.mults[targetStep] || cfg.mults[3];
+
+    var targetMultFloat = parseFloat(targetMult.replace('x', ''));
+    var cashoutAmount = Math.floor(getRecommendedBet() * targetMultFloat);
+
+    var chickenHtml = 
+      '<div class="chicken-game-container">' +
+        // Top Game Bar
+        '<div class="chicken-top-bar">' +
+          '<div class="chicken-logo-tag">CHICKEN R<span class="egg-o">🥚</span>AD</div>' +
+          '<div class="chicken-live-stat">' +
+            '<span class="live-dot"></span> Online: <strong>33,386</strong>' +
+          '</div>' +
+          '<div class="chicken-live-win">👤 Blush... +$5,160.00</div>' +
+        '</div>' +
+
+        // Highway Lanes
+        '<div class="chicken-highway" id="chicken-highway-track">' +
+          '<div class="highway-lanes">';
+
+    for (var i = 0; i < cfg.mults.length; i++) {
+      var mult = cfg.mults[i];
+      var isPassed = i < currentStep;
+      var isCurrent = i === currentStep;
+      var isTarget = i === targetStep;
+
+      var hasTruck = (State.chickenTrucks || []).indexOf(i) !== -1;
+      var hasVan = (State.chickenVans || []).indexOf(i) !== -1;
+      var hasBarrier = (State.chickenBarriers || []).indexOf(i) !== -1;
+
+      chickenHtml += '<div class="highway-lane" data-lane-idx="' + i + '">';
+      chickenHtml += '<span class="lane-idx-tag">#' + (i + 1) + '</span>';
+
+      // Top Obstacle
+      if (hasTruck && !isCurrent) {
+        chickenHtml += 
+          '<div class="road-obstacle-top">' +
+            '<div class="truck-vehicle">' +
+              '<span class="truck-roof-tag">IN/OUT</span>' +
+              '<div class="truck-windshield"></div>' +
+              '<div class="truck-grille">' +
+                '<div class="truck-headlight"></div>' +
+                '<div class="truck-headlight"></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      } else if (hasBarrier && !isCurrent) {
+        chickenHtml += '<div class="road-obstacle-top"><div class="road-barrier"></div></div>';
+      }
+
+      // Chicken or Manhole
+      if (isCurrent) {
+        chickenHtml += 
+          '<div class="chicken-character-box hopping">' +
+            '<svg viewBox="0 0 64 64" class="chicken-svg-avatar">' +
+              '<ellipse cx="32" cy="38" rx="20" ry="18" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>' +
+              '<path d="M 22 36 Q 30 42 36 36 Q 30 32 22 36" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>' +
+              '<path d="M 28 20 C 26 14, 32 14, 34 18 C 36 14, 42 14, 40 20 Z" fill="#EF4444"/>' +
+              '<circle cx="38" cy="28" r="4" fill="#0F172A"/>' +
+              '<circle cx="39" cy="27" r="1.5" fill="#FFFFFF"/>' +
+              '<polygon points="44,30 52,33 44,36" fill="#F97316"/>' +
+              '<circle cx="36" cy="34" r="3" fill="#FECDD3" opacity="0.8"/>' +
+              '<path d="M 26 54 L 26 58 M 23 58 L 29 58 M 38 54 L 38 58 M 35 58 L 41 58" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>' +
+            '</svg>' +
+            '<div class="chicken-mult-pill">' + mult + '</div>' +
+          '</div>';
       } else {
-        codeErr.style.display = 'block';
-        codeInput.value = '';
-        codeInput.focus();
+        var discClasses = 'manhole-disc';
+        if (isPassed) discClasses += ' step-gold';
+        else if (isTarget) discClasses += ' signal-predicted-safe signal-target-cashout';
+
+        chickenHtml += 
+          '<div class="' + discClasses + '" title="Cliquez pour avancer ici">' +
+            '<div class="manhole-slits"></div>' +
+            '<div class="manhole-multiplier">' + mult + '</div>' +
+          '</div>';
+      }
+
+      // Bottom Obstacle
+      if (hasVan && !isCurrent) {
+        chickenHtml += 
+          '<div class="road-obstacle-bottom">' +
+            '<div class="van-vehicle">' +
+              '<div class="van-roof-green"></div>' +
+              '<div class="van-windshield"></div>' +
+            '</div>' +
+          '</div>';
+      }
+
+      chickenHtml += '</div>';
+    }
+
+    chickenHtml += 
+          '</div>' +
+        '</div>' +
+
+        // Bottom Controls Bar
+        '<div class="chicken-controls-bar">' +
+          '<div class="chicken-diff-row">' +
+            '<div class="chicken-diff-tabs" id="chicken-diff-selector">' +
+              '<button class="btn-diff-tab ' + (diff === 'Easy' ? 'active' : '') + '" data-diff="Easy" type="button">Easy</button>' +
+              '<button class="btn-diff-tab ' + (diff === 'Medium' ? 'active' : '') + '" data-diff="Medium" type="button">Medium</button>' +
+              '<button class="btn-diff-tab ' + (diff === 'Hard' ? 'active' : '') + '" data-diff="Hard" type="button">Hard</button>' +
+              '<button class="btn-diff-tab ' + (diff === 'Hardcore' ? 'active' : '') + '" data-diff="Hardcore" type="button">Hardcore</button>' +
+            '</div>' +
+            '<div class="chicken-hit-chance">' +
+              'Risque d\'impact: <strong class="text-red">' + cfg.hitChance + '</strong>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="chicken-action-btns-row">' +
+            '<button class="btn-chicken-cashout" id="btn-chicken-cashout-hint" type="button">' +
+              '🎯 CASHOUT: ' + targetMult + ' (' + formatMoney(cashoutAmount) + ')' +
+            '</button>' +
+            '<button class="btn-chicken-go" id="btn-chicken-next-step" type="button">' +
+              '⚡ NOUVEAU SIGNAL IA' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    stageContent.innerHTML = chickenHtml;
+
+    // Center scroll on current chicken position
+    var trackEl = document.getElementById('chicken-highway-track');
+    if (trackEl) {
+      var activeLane = trackEl.querySelector('.highway-lane[data-lane-idx="' + currentStep + '"]');
+      if (activeLane) {
+        trackEl.scrollLeft = activeLane.offsetLeft - 100;
       }
     }
 
-    // --- PREDICTOR SCREEN LOGIC ---
-    let selectedGame = '';
-    const screenMain = document.getElementById('screen-main');
-    const screenPred = document.getElementById('screen-pred');
-    const predGameTitle = document.getElementById('pred-game-title');
-    
-    const termIdle = document.getElementById('term-idle');
-    const termLoader = document.getElementById('term-loader');
-    const termResult = document.getElementById('term-result');
-    const loaderTxt = document.getElementById('loader-txt');
-    const termProgress = document.getElementById('term-progress');
+    // Attach difficulty selector click events
+    var diffTabs = document.querySelectorAll('#chicken-diff-selector .btn-diff-tab');
+    diffTabs.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        initAudio();
+        SoundFx.click();
+        State.chickenDifficulty = this.getAttribute('data-diff');
+        var newCfg = ChickenDifficultyConfig[State.chickenDifficulty];
+        State.chickenTarget = Math.floor(Math.random() * (newCfg.mults.length - 2)) + 2;
+        State.chickenStep = 0;
+        randomizeChickenHazards(State.chickenTarget, newCfg.mults.length);
+        renderChickenSignal(true);
+        showToast('Difficulté: ' + State.chickenDifficulty, '🐔');
+      });
+    });
 
-    const betBox = document.getElementById('bet-box');
-    const betVal = document.getElementById('bet-val');
-    const btnStep1 = document.getElementById('btn-step1');
-    const btnStep2 = document.getElementById('btn-step2');
-
-    function selectGame(name, icon) {
-      selectedGame = name;
-      predGameTitle.innerHTML = `${icon} ${name}`;
-
-      // Reset predictor UI
-      termIdle.style.display = 'block';
-      termLoader.style.display = 'none';
-      termResult.style.display = 'none';
-      betBox.style.display = 'none';
-      
-      btnStep1.disabled = false;
-      btnStep2.disabled = true;
-
-      screenMain.classList.remove('active');
-      screenPred.classList.add('active');
+    // Advance button triggers random signal generator
+    var btnGo = document.getElementById('btn-chicken-next-step');
+    if (btnGo) {
+      btnGo.addEventListener('click', function(e) {
+        e.stopPropagation();
+        initAudio();
+        generateRandomChickenSignal();
+      });
     }
 
-    function goBackMain() {
-      screenPred.classList.remove('active');
-      screenMain.classList.add('active');
+    // Cashout hint button
+    var btnCashout = document.getElementById('btn-chicken-cashout-hint');
+    if (btnCashout) {
+      btnCashout.addEventListener('click', function(e) {
+        e.stopPropagation();
+        initAudio();
+        SoundFx.signalSuccess();
+        showToast('Objectif Cashout: ' + targetMult + ' (' + formatMoney(cashoutAmount) + ')', '🎯');
+      });
     }
 
-    // Step 1: Get Bet Size
-    function getBetSize() {
-      const allowedBets = [200, 250, 300, 350, 400, 450];
-      const randomBet = allowedBets[Math.floor(Math.random() * allowedBets.length)];
-
-      betVal.textContent = `${randomBet} CDF`;
-      betBox.style.display = 'block';
-
-      btnStep2.disabled = false;
-      termIdle.textContent = 'Taille du pari définie ! Cliquez sur "Obtenir Signal".';
-    }
-
-    // Step 2: Get Signal with analysis loader
-    function getSignal() {
-      btnStep1.disabled = true;
-      btnStep2.disabled = true;
-
-      termIdle.style.display = 'none';
-      termResult.style.display = 'none';
-      termLoader.style.display = 'block';
-
-      const steps = [
-        "Connexion à l'API BetAndYou...",
-        "Contournement de l'algorithme...",
-        "Analyse de la clef de hachage...",
-        "Calcul du signal exact..."
-      ];
-
-      let prog = 0;
-      termProgress.style.width = '0%';
-      loaderTxt.textContent = steps[0];
-
-      const interval = setInterval(() => {
-        prog += 5;
-        termProgress.style.width = prog + '%';
-
-        if (prog === 25) loaderTxt.textContent = steps[1];
-        if (prog === 50) loaderTxt.textContent = steps[2];
-        if (prog === 75) loaderTxt.textContent = steps[3];
-
-        if (prog >= 100) {
-          clearInterval(interval);
-          renderPrediction();
+    // Click on any lane to move chicken there directly
+    var lanes = stageContent.querySelectorAll('.highway-lane');
+    lanes.forEach(function(lane) {
+      lane.addEventListener('click', function() {
+        var idx = parseInt(this.getAttribute('data-lane-idx'), 10);
+        if (!isNaN(idx) && idx !== State.chickenStep) {
+          initAudio();
+          SoundFx.step();
+          State.chickenStep = idx;
+          renderChickenSignal(true);
         }
-      }, 90);
-    }
+      });
+    });
+  }
 
-    function renderPrediction() {
-      termLoader.style.display = 'none';
-      termResult.style.display = 'block';
+  // ==========================================================================
+  // 6. INITIALIZATION (ALWAYS STARTS ON CODE ENTRY PAGE)
+  // ==========================================================================
+  updateCalculatorUI();
+  showView('login');
 
-      btnStep1.disabled = false;
-      btnStep2.disabled = false;
-
-      termResult.innerHTML = '';
-
-      if (selectedGame === 'Aviator' || selectedGame === 'Crash') {
-        const coeff = (Math.random() * (4.80 - 1.35) + 1.35).toFixed(2);
-        termResult.innerHTML = `<div class="res-coeff">x${coeff}</div>`;
-      } 
-      else if (selectedGame === 'Mines') {
-        let gridHtml = '<div class="mines-grid">';
-        let safeIndexes = [];
-        while(safeIndexes.length < 4) {
-          let idx = Math.floor(Math.random() * 25);
-          if(!safeIndexes.includes(idx)) safeIndexes.push(idx);
-        }
-        for (let i = 0; i < 25; i++) {
-          if (safeIndexes.includes(i)) {
-            gridHtml += `<div class="mine-cell safe">★</div>`;
-          } else {
-            gridHtml += `<div class="mine-cell"></div>`;
-          }
-        }
-        gridHtml += '</div>';
-        termResult.innerHTML = gridHtml;
-      }
-      else if (selectedGame === 'Apple of Fortune') {
-        // Логика Apple of Fortune: Сетка снизу вверх
-        // Строка 1 (низ): 3 яблока
-        // Строка 2: 3 яблока
-        // Строка 3: 2 яблока
-        // Строка 4: 2 яблока
-        // Строка 5 (верх): 1 яблоко
-        
-        let gridHtml = '<div style="display:flex; flex-direction:column-reverse; gap:4px; align-items:center;">';
-        const safeCounts = [3, 3, 2, 2, 1]; // количество безопасных яблок по строкам
-        
-        for(let row = 0; row < 5; row++) {
-          let rowSafeCount = safeCounts[row];
-          let safeIdx = [];
-          
-          while(safeIdx.length < rowSafeCount) {
-            let rnd = Math.floor(Math.random() * 5);
-            if(!safeIdx.includes(rnd)) safeIdx.push(rnd);
-          }
-          
-          gridHtml += '<div style="display:flex; gap:4px;">';
-          for (let col = 0; col < 5; col++) {
-            if (safeIdx.includes(col)) {
-              gridHtml += `<div class="mine-cell apple-safe">🍏</div>`;
-            } else {
-              gridHtml += `<div class="mine-cell"></div>`;
-            }
-          }
-          gridHtml += '</div>';
-        }
-        gridHtml += '</div>';
-        termResult.innerHTML = gridHtml;
-      }
-      else if (selectedGame === 'Penalty') {
-        const dirs = [
-          "🎯 Lucarne Gauche", "🎯 Lucarne Droite", 
-          "⚽ Bas Gauche", "⚽ Bas Droit", "⬇️ Centre-Droit"
-        ];
-        const res = dirs[Math.floor(Math.random() * dirs.length)];
-        termResult.innerHTML = `<div class="penalty-txt">${res}</div>`;
-      }
-      else if (selectedGame === 'Chicken Road') {
-        // Логика для Chicken Road: указываем количество прыжков
-        const jumps = Math.floor(Math.random() * 3) + 3; // От 3 до 5 прыжков
-        termResult.innerHTML = `
-          <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Nombres de sauts sécurisés :</div>
-          <div class="res-coeff" style="font-size: 34px; margin-bottom: 5px;">🐔 ${jumps} SAUTS</div>
-          <div class="penalty-txt" style="font-size: 14px;">Encaissez vos gains après le saut n°${jumps} !</div>
-        `;
-      }
-    }
-  </script>
+})();
+</script>
 </body>
 </html>
