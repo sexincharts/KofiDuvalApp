@@ -943,669 +943,571 @@ body {
 }
 
 /* ==========================================================================
-   GAME 2: APPLE OF FORTUNE SIGNAL ARENA
+   GAME 2: APPLE OF FORTUNE (PREDICTOR — JUNGLE WOOD BOARD)
    ========================================================================== */
-.apple-tower-container {
+.apple-game-container {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 30%, #17532d 0%, #0c331a 60%, #061c0e 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 4px solid #5a3014;
+  box-shadow: 0 0 35px rgba(0, 60, 20, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.7);
+  position: relative;
+  padding-bottom: 10px;
+}
+.apple-board-frame {
+  position: relative;
+  margin: 12px 10px 6px;
+  padding: 6px;
+  background: linear-gradient(180deg, #572a0e 0%, #381907 100%);
+  border-radius: 10px;
+  border: 4px solid #7d441b;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.7), 0 6px 15px rgba(0,0,0,0.6);
+}
+.apple-corner-leaf {
+  position: absolute;
+  font-size: 24px;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+.apple-corner-leaf.tl { top: -14px; left: -10px; }
+.apple-corner-leaf.tr { top: -14px; right: -10px; }
+.apple-corner-leaf.bl { bottom: -14px; left: -10px; }
+.apple-corner-leaf.br { bottom: -14px; right: -10px; }
+.apple-grid-with-mults {
+  display: flex;
+  gap: 3px;
+}
+.apple-grid-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+}
+.apple-mult-column {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-.apple-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s;
-}
-
-.apple-row.active-signal {
-  border-color: var(--cyan-main);
-  background: rgba(0, 229, 255, 0.1);
-  box-shadow: 0 0 12px var(--cyan-glow);
-}
-
-.apple-row-mult {
+  gap: 2px;
   width: 58px;
-  font-size: 12px;
-  font-weight: 900;
-  color: var(--gold-main);
-  text-align: right;
   flex-shrink: 0;
 }
-
-.apple-cells {
-  display: flex;
-  gap: 6px;
-  flex: 1;
-}
-
-.apple-cell {
-  flex: 1;
-  aspect-ratio: 1.3;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+.apple-brick {
+  aspect-ratio: 1.15;
+  background: linear-gradient(180deg, #be834b 0%, #9e6430 45%, #7e481c 100%);
+  border: 1px solid #572a0e;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   transition: all 0.2s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 3px rgba(0,0,0,0.4);
   position: relative;
 }
-
-.apple-cell.signal-safe {
-  border-color: var(--green-main);
-  background: rgba(0, 230, 118, 0.25);
-  box-shadow: 0 0 14px var(--green-glow);
-  transform: scale(1.08);
-  animation: pulseSignal 1.5s infinite alternate;
+.apple-brick::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  right: 15%;
+  height: 1px;
+  background: rgba(0,0,0,0.15);
 }
-
-@keyframes pulseSignal {
-  0% { transform: scale(1.04); }
-  100% { transform: scale(1.12); }
+.apple-brick.revealed-safe {
+  background: linear-gradient(180deg, #ffe082 0%, #ffb300 50%, #f57c00 100%);
+  border: 2px solid #ffd54f;
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.8), inset 0 0 8px rgba(255,255,255,0.6);
+  animation: appleSafePulse 1.2s infinite alternate;
+  z-index: 2;
+}
+@keyframes appleSafePulse {
+  0% { transform: scale(1); box-shadow: 0 0 12px rgba(255, 215, 0, 0.7); }
+  100% { transform: scale(1.08); box-shadow: 0 0 22px rgba(255, 215, 0, 1); }
+}
+.apple-mult-tag {
+  flex: 1;
+  background: linear-gradient(180deg, #7a7e85 0%, #505359 100%);
+  border: 1px solid #3e4147;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #e5e7eb;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.apple-mult-tag.active-row {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+  border: 1px solid #86efac;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
 }
 
 /* ==========================================================================
-   GAME 3: MINES SIGNAL ARENA
+   GAME 3: MINES (PREDICTOR — LUCKY MINES 5x5 GRID)
    ========================================================================== */
-.mines-top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding: 8px 14px;
-  background: var(--bg-surface);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 700;
+.mines-game-container {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  background: #171d2b;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  padding: 10px 0;
 }
-
 .mines-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+  padding: 14px 16px;
   max-width: 380px;
   margin: 0 auto;
   width: 100%;
 }
-
 .mine-tile {
   aspect-ratio: 1;
-  background: linear-gradient(145deg, #1A2130 0%, #121824 100%);
-  border: 2px solid #283248;
-  border-radius: 10px;
+  background: #222a3d;
+  border: 2px solid #2f3b54;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 24px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.mine-tile .star-icon {
+  color: #35425f;
+  font-size: 26px;
   transition: all 0.3s;
 }
-
 .mine-tile.signal-diamond {
-  border-color: var(--green-main);
-  background: radial-gradient(circle, rgba(0, 230, 118, 0.35) 0%, #121824 80%);
-  box-shadow: 0 0 18px var(--green-glow);
-  animation: pulseDiamond 1.2s infinite alternate;
+  background: linear-gradient(145deg, #ffb703 0%, #fb8500 100%);
+  border: 2px solid #ffe082;
+  box-shadow: 0 0 16px rgba(251, 133, 0, 0.7);
+  animation: mineStarPulse 1.2s infinite alternate;
 }
-
-@keyframes pulseDiamond {
-  0% { transform: scale(1); border-color: var(--green-main); }
-  100% { transform: scale(1.08); border-color: var(--gold-main); }
+.mine-tile.signal-diamond .star-icon {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+@keyframes mineStarPulse {
+  0% { transform: scale(1); box-shadow: 0 0 14px rgba(251, 133, 0, 0.6); }
+  100% { transform: scale(1.08); box-shadow: 0 0 24px rgba(251, 133, 0, 0.9); }
 }
 
 /* ==========================================================================
-   GAME 4: PENALTY SIGNAL ARENA
+   GAME 4: PENALTY UNLIMITED (4-SHOT SERIES PREDICTOR)
    ========================================================================== */
-.penalty-arena {
+.penalty-game-container {
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #171d2b;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+.penalty-series-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(10, 15, 25, 0.85);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  gap: 8px;
+}
+.penalty-series-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.penalty-shot-dot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #202738;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.penalty-shot-dot.done {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #4ade80;
+}
+.penalty-shot-dot.current {
+  background: #22c55e;
+  border-color: #86efac;
+  color: #000;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+  animation: shotPillPulse 1s infinite alternate;
+}
+@keyframes shotPillPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.06); }
+}
+.btn-reset-penalty {
+  background: #252d40;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+.btn-reset-penalty:hover {
+  background: #333d54;
+  color: #fff;
+  border-color: var(--cyan-main);
+}
+.penalty-sky-area {
   position: relative;
+  background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 35%, #86efac 68%, #22c55e 72%, #b91c1c 76%, #991b1b 100%);
+  min-height: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
+  padding-bottom: 16px;
 }
-
+.penalty-palm-left, .penalty-palm-right {
+  position: absolute;
+  top: 30px;
+  font-size: 64px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+.penalty-palm-left { left: 4px; transform: scaleX(-1); }
+.penalty-palm-right { right: 4px; }
+.penalty-goal-wrapper {
+  position: relative;
+  z-index: 5;
+  width: 90%;
+  margin-top: 20px;
+}
 .penalty-goal-box {
   width: 100%;
-  height: 220px;
-  background: linear-gradient(180deg, #091A13 0%, #0E2B1E 100%);
-  border: 8px solid #E2E8F0;
-  border-bottom: 2px solid #22C55E;
-  border-radius: 8px 8px 0 0;
+  height: 190px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 6px solid #ffffff;
+  border-bottom: 3px solid #22c55e;
+  border-radius: 6px 6px 0 0;
   position: relative;
-  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
   overflow: hidden;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 20px 20px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.4), 0 6px 12px rgba(0,0,0,0.3);
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 19%, rgba(255,255,255,0.25) 19%, rgba(255,255,255,0.25) 20%),
+    repeating-linear-gradient(0deg, transparent, transparent 32%, rgba(255,255,255,0.25) 32%, rgba(255,255,255,0.25) 33.3%);
 }
-
 .goalkeeper {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 58px;
+  font-size: 52px;
   pointer-events: none;
-  z-index: 2;
-  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.7));
+  z-index: 4;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6));
 }
-
 .penalty-targets-layer {
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 8px;
-  padding: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  padding: 6px;
   z-index: 3;
 }
-
 .penalty-target {
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px dashed rgba(255,255,255,0.4);
+  border-radius: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255,255,255,0.5);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
 }
-
-.penalty-target.signal-lock {
-  background: rgba(0, 230, 118, 0.35);
-  border: 2px solid var(--green-main);
-  box-shadow: 0 0 20px var(--green-glow);
+.penalty-target.scored-shot {
+  background: rgba(34, 197, 94, 0.75);
+  border: 2px solid #86efac;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.7);
   color: #fff;
-  font-size: 24px;
-  animation: lockPulse 1s infinite alternate;
+  font-size: 18px;
 }
-
-@keyframes lockPulse {
-  0% { transform: scale(0.96); border-color: var(--green-main); }
-  100% { transform: scale(1.04); border-color: var(--gold-main); }
+.penalty-target.signal-lock {
+  background: radial-gradient(circle at 40% 35%, #86efac 0%, #22c55e 60%, #15803d 100%);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 24px rgba(34, 197, 94, 1), 0 0 8px #ffffff;
+  color: #fff;
+  font-size: 22px;
+  animation: penaltyPulse 1s infinite alternate;
+  z-index: 5;
+}
+.penalty-target-badge {
+  position: absolute;
+  bottom: 2px;
+  font-size: 8px;
+  font-weight: 900;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+@keyframes penaltyPulse {
+  0% { transform: scale(0.94); }
+  100% { transform: scale(1.12); box-shadow: 0 0 30px rgba(34, 197, 94, 1); }
+}
+.penalty-court-ball {
+  position: relative;
+  z-index: 5;
+  margin-top: 14px;
+  font-size: 56px;
+  text-align: center;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,0.6));
 }
 
 /* ==========================================================================
-   GAME 5: CHICKEN ROAD (DYNAMIC & INTERACTIVE HIGHWAY REPLICA)
+   GAME 5: CHICKEN ROAD (SINGLE-PATH HORIZONTAL HIGHWAY — LEFT TO RIGHT)
    ========================================================================== */
 .chicken-game-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 620px;
+  max-width: 580px;
   margin: 0 auto;
-  background: #23262E;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  background: #171a29;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   overflow: hidden;
 }
-
-.chicken-top-bar {
+.chicken-summary-banner {
+  background: linear-gradient(135deg, #1e2538 0%, #151a28 100%);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chicken-summary-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: #181A20;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 12px;
 }
-
-.chicken-logo-tag {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
+.chicken-summary-title {
+  font-size: 15px;
   font-weight: 900;
   color: #fff;
-  letter-spacing: 0.5px;
-}
-.chicken-logo-tag .egg-o {
-  color: #FF3366;
-}
-
-.chicken-live-stat {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-secondary);
 }
-
-.chicken-live-win {
-  color: var(--green-main);
-  font-weight: 800;
-}
-
-.chicken-highway {
-  position: relative;
-  background: #3F424B;
-  min-height: 240px;
-  display: flex;
-  align-items: center;
-  padding: 12px 6px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-}
-
-.highway-lanes {
-  display: flex;
-  width: 100%;
-  min-width: 560px;
-  height: 100%;
-  position: relative;
-}
-
-.highway-lane {
-  flex: 1;
-  position: relative;
-  border-right: 2px dashed rgba(255, 255, 255, 0.35);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 4px;
-  min-height: 215px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.highway-lane:hover {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.highway-lane:last-child {
-  border-right: none;
-}
-
-/* Lane Number Indicator */
-.lane-idx-tag {
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  font-size: 9px;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* Obstacles: Barrier & Trucks */
-.road-obstacle-top {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.road-obstacle-bottom {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* Yellow Caution Barrier */
-.road-barrier {
-  width: 54px;
-  height: 20px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #F59E0B,
-    #F59E0B 8px,
-    #1E293B 8px,
-    #1E293B 16px
-  );
-  border: 2px solid #E2E8F0;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  position: relative;
-}
-.road-barrier::before, .road-barrier::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  width: 4px;
-  height: 6px;
-  background: #64748B;
-}
-.road-barrier::before { left: 4px; }
-.road-barrier::after { right: 4px; }
-
-/* Construction Truck */
-.truck-vehicle {
-  width: 48px;
-  height: 64px;
-  background: #F59E0B;
-  border: 2px solid #0F172A;
-  border-radius: 8px 8px 4px 4px;
-  position: relative;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: vehicleRumble 0.6s infinite alternate ease-in-out;
-}
-
-@keyframes vehicleRumble {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-2px); }
-}
-
-.truck-windshield {
-  width: 36px;
-  height: 18px;
-  background: #38BDF8;
-  border: 2px solid #0F172A;
-  border-radius: 4px;
-  margin-top: 5px;
-}
-.truck-grille {
-  width: 30px;
-  height: 10px;
-  background: #1E293B;
-  border-radius: 2px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-.truck-headlight {
-  width: 5px;
-  height: 5px;
-  background: #FEF08A;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #FEF08A;
-}
-.truck-roof-tag {
-  position: absolute;
-  top: -12px;
-  background: #0F172A;
-  color: #F59E0B;
-  font-size: 8px;
-  font-weight: 900;
-  padding: 1px 4px;
-  border-radius: 2px;
-  border: 1px solid #F59E0B;
-}
-
-/* White & Green Van */
-.van-vehicle {
-  width: 44px;
-  height: 56px;
-  background: #F8FAFC;
-  border: 2px solid #0F172A;
-  border-radius: 6px;
-  position: relative;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.van-roof-green {
-  width: 36px;
-  height: 10px;
-  background: #22C55E;
-  border-radius: 3px;
-  margin-top: 4px;
-}
-.van-windshield {
-  width: 32px;
-  height: 14px;
-  background: #94A3B8;
-  border: 2px solid #0F172A;
-  border-radius: 3px;
-  margin-top: 4px;
-}
-
-/* Sewer Manhole Grate Disc */
-.manhole-disc {
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #6B7280 0%, #374151 60%, #1F2937 100%);
-  border: 4px solid #4B5563;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.manhole-disc:hover {
-  transform: scale(1.06);
-}
-
-.manhole-disc::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.25);
-  pointer-events: none;
-}
-
-.manhole-multiplier {
+.chicken-summary-hops-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
   font-size: 13px;
   font-weight: 900;
-  color: #F3F4F6;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-  font-variant-numeric: tabular-nums;
-  z-index: 2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+  letter-spacing: 0.5px;
 }
-
-.manhole-slits {
+.chicken-steps-chain {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.chicken-step-chip {
+  background: #232b3e;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+.chicken-step-chip.active {
+  background: #22c55e;
+  border-color: #86efac;
+  color: #000;
+  font-weight: 900;
+}
+.chicken-step-chip.target {
+  background: linear-gradient(135deg, #f59e0b, #eab308);
+  border-color: #fef08a;
+  color: #000;
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+.chicken-step-arrow {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.chicken-highway-track {
+  position: relative;
+  background: linear-gradient(180deg, #1c2030 0%, #282e44 50%, #1c2030 100%);
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  padding: 24px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 3px solid #3b425e;
+  border-bottom: 3px solid #3b425e;
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.chicken-highway-track::before {
+  content: '';
   position: absolute;
-  inset: 6px;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 4px,
-    rgba(0, 0, 0, 0.45) 4px,
-    rgba(0, 0, 0, 0.45) 6px
-  );
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  height: 0;
+  border-top: 3px dashed rgba(255,255,255,0.22);
+  z-index: 1;
+  pointer-events: none;
+}
+.chicken-track-nodes {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  position: relative;
+  z-index: 2;
+  min-width: max-content;
+  padding: 10px 10px;
+}
+.chicken-track-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 86px;
+}
+.chicken-start-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  position: relative;
+}
+.chicken-start-pad {
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  opacity: 0.7;
+  background: #1e2436;
+  border: 2px dashed #4b5578;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
 }
-
-/* Completed Step: Gold Coin */
-.manhole-disc.step-gold {
-  background: radial-gradient(circle at 35% 35%, #FDE047 0%, #EAB308 60%, #CA8A04 100%);
-  border-color: #FEF08A;
-  box-shadow: 0 0 16px rgba(234, 179, 8, 0.6);
+.chicken-disc {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
 }
-.manhole-disc.step-gold .manhole-multiplier {
-  color: #713F12;
-  text-shadow: none;
+.chicken-disc.disc-default {
+  background: linear-gradient(145deg, #3d4563, #2e344d);
+  border: 2px solid #4d577e;
+  color: #94a3b8;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  opacity: 0.35;
+  filter: grayscale(0.8);
 }
-
-/* Chicken Character Box */
+.chicken-disc.disc-safe {
+  background: radial-gradient(circle at 40% 35%, #22c55e 0%, #15803d 70%);
+  border: 3px solid #86efac;
+  color: #fff;
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.7), inset 0 2px 4px rgba(255,255,255,0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.chicken-disc.disc-target {
+  background: radial-gradient(circle at 40% 35%, #ffd700 0%, #f59e0b 70%);
+  border: 3px solid #fef08a;
+  color: #713f12;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.9), inset 0 2px 4px rgba(255,255,255,0.4);
+  animation: chickenTargetPulse 1s infinite alternate;
+}
+.chicken-step-number-tag {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+@keyframes chickenTargetPulse {
+  0% { transform: scale(1); box-shadow: 0 0 16px rgba(245, 158, 11, 0.7); }
+  100% { transform: scale(1.08); box-shadow: 0 0 26px rgba(245, 158, 11, 1); }
+}
 .chicken-character-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 5;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .chicken-character-box.hopping {
-  animation: chickenJump 0.35s ease-out;
+  animation: chickenJumpHorizontal 0.35s ease-out;
 }
-
-@keyframes chickenJump {
+@keyframes chickenJumpHorizontal {
   0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-24px) scale(1.18); }
+  50% { transform: translateY(-24px) scale(1.15); }
   100% { transform: translateY(0) scale(1); }
 }
-
 .chicken-svg-avatar {
-  width: 58px;
-  height: 58px;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+  width: 76px;
+  height: 76px;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
   animation: chickenIdle 0.7s infinite alternate ease-in-out;
 }
-
 @keyframes chickenIdle {
-  0% { transform: translateY(0) rotate(-2deg); }
-  100% { transform: translateY(-4px) rotate(2deg); }
-}
-
-.chicken-mult-pill {
-  background: #2563EB;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 900;
-  padding: 3px 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.6);
-  margin-top: 2px;
-  font-variant-numeric: tabular-nums;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  animation: pillPulse 1.5s infinite alternate;
-}
-
-@keyframes pillPulse {
-  0% { transform: scale(1); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.6); }
-  100% { transform: scale(1.06); box-shadow: 0 0 16px rgba(59, 130, 246, 0.9); }
-}
-
-/* AI Predictor Highlight Target */
-.manhole-disc.signal-predicted-safe {
-  border-color: var(--green-main);
-  box-shadow: 0 0 20px var(--green-glow), inset 0 0 10px rgba(0, 230, 118, 0.4);
-  animation: safePulse 1.2s infinite alternate;
-}
-.manhole-disc.signal-predicted-safe .manhole-multiplier {
-  color: var(--green-main);
-}
-
-.manhole-disc.signal-target-cashout {
-  border-color: var(--gold-main);
-  box-shadow: 0 0 25px var(--gold-glow), inset 0 0 14px rgba(255, 215, 0, 0.6);
-  animation: targetPulse 1s infinite alternate;
-}
-.manhole-disc.signal-target-cashout .manhole-multiplier {
-  color: var(--gold-main);
-}
-
-@keyframes safePulse {
-  0% { transform: scale(1); border-color: var(--green-main); }
-  100% { transform: scale(1.08); border-color: #69F0AE; }
-}
-
-@keyframes targetPulse {
-  0% { transform: scale(1); border-color: var(--gold-main); }
-  100% { transform: scale(1.12); border-color: #FFF; }
-}
-
-/* Bottom Controls */
-.chicken-controls-bar {
-  background: #181A20;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.chicken-diff-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.chicken-diff-tabs {
-  display: flex;
-  background: #0E1014;
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  gap: 2px;
-}
-
-.btn-diff-tab {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-diff-tab.active {
-  background: #2A303C;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-.chicken-hit-chance {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.chicken-action-btns-row {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 10px;
-}
-
-.btn-chicken-cashout {
-  background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
-  color: #000;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 13px;
-  font-weight: 900;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.35);
-  transition: all 0.15s;
-}
-
-.btn-chicken-cashout:active {
-  transform: scale(0.98);
-}
-
-.btn-chicken-go {
-  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 14px;
-  font-weight: 900;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
-  transition: all 0.15s;
-}
-
-.btn-chicken-go:active {
-  transform: scale(0.98);
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-3px) rotate(1deg); }
 }
 
 /* ==========================================================================
@@ -2078,123 +1980,159 @@ body {
   'use strict';
 
   // ==========================================================================
-  // 1. PROCEDURAL AUDIO SYNTHESIZER (0 KB Bandwidth)
+  // 1. PROCEDURAL AUDIO SYNTHESIZER (BULLETPROOF & AUTO-UNLOCKING)
   // ==========================================================================
   var audioCtx = null;
   var isSoundEnabled = true;
 
-  function initAudio() {
-    if (!audioCtx) {
-      var AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) audioCtx = new AudioContextClass();
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+  function ensureAudio() {
+    try {
+      if (!audioCtx) {
+        var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    } catch(e){}
+    return audioCtx;
   }
+
+  function initAudio() {
+    ensureAudio();
+  }
+
+  // Global unlock on any user interaction (essential for Safari & Chrome autoplay policy)
+  ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(function(evt) {
+    document.addEventListener(evt, function() {
+      ensureAudio();
+    }, { passive: true });
+  });
 
   var SoundFx = {
     click: function() {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.frequency.setValueAtTime(1000, now);
+        osc.frequency.linearRampToValueAtTime(300, now + 0.05);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + 0.05);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.04);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
       } catch(e){}
     },
 
     step: function() {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(880, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.linearRampToValueAtTime(900, now + 0.09);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + 0.09);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.08);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.09);
       } catch(e){}
     },
 
     planeDrone: function(freqStart, freqEnd, duration) {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
+        var dur = duration || 0.5;
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(freqStart || 120, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freqEnd || 280, audioCtx.currentTime + duration);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.frequency.setValueAtTime(freqStart || 130, now);
+        osc.frequency.linearRampToValueAtTime(freqEnd || 320, now + dur);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + dur);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + dur);
       } catch(e){}
     },
 
     radarScan: function() {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.linearRampToValueAtTime(1800, now + 0.28);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + 0.32);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.3);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.32);
       } catch(e){}
     },
 
     signalSuccess: function() {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var notes = [587.33, 739.99, 880.00, 1174.66];
+        var now = ctx.currentTime;
+        var notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Major Fanfare)
         notes.forEach(function(freq, idx) {
-          var osc = audioCtx.createOscillator();
-          var gain = audioCtx.createGain();
+          var t = now + idx * 0.06;
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.05);
-          gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.05);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.05 + 0.25);
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.35, t);
+          gain.gain.linearRampToValueAtTime(0.0001, t + 0.25);
           osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(audioCtx.currentTime + idx * 0.05);
-          osc.stop(audioCtx.currentTime + idx * 0.05 + 0.25);
+          gain.connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.26);
         });
       } catch(e){}
     },
 
     error: function() {
-      if (!isSoundEnabled || !audioCtx) return;
+      if (!isSoundEnabled) return;
+      var ctx = ensureAudio();
+      if (!ctx) return;
       try {
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain();
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.22);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + 0.22);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.2);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
       } catch(e){}
     }
   };
@@ -2206,12 +2144,11 @@ body {
     isLoggedIn: false,
     deposit: 50000, // Total Bankroll in CDF
     currentGame: 'aviator',
-    chickenDifficulty: 'Medium',
-    chickenStep: 3,
-    chickenTarget: 4,
-    chickenTrucks: [3, 5],
-    chickenVans: [1, 6],
-    chickenBarriers: [0, 4],
+    chickenDifficulty: 'Easy',
+    chickenPaths: [],
+    chickenStep: 0,
+    chickenTarget: 3,
+    penaltyShots: [],
     chickenAnimTimer: null,
     aviatorAnimId: null,
     isCoolingDown: false
@@ -2360,10 +2297,13 @@ body {
 
   var btnToggleSound = document.getElementById('btn-toggle-sound');
   btnToggleSound.addEventListener('click', function() {
-    initAudio();
+    ensureAudio();
     isSoundEnabled = !isSoundEnabled;
     btnToggleSound.textContent = isSoundEnabled ? '🔊' : '🔇';
     showToast(isSoundEnabled ? 'Son activé' : 'Son coupé', isSoundEnabled ? '🔊' : '🔇');
+    if (isSoundEnabled) {
+      SoundFx.click();
+    }
   });
 
   // ==========================================================================
@@ -2482,7 +2422,7 @@ body {
     if (gameId === 'aviator') renderAviatorSignal();
     else if (gameId === 'apple') renderAppleSignal();
     else if (gameId === 'mines') renderMinesSignal();
-    else if (gameId === 'penalty') renderPenaltySignal();
+    else if (gameId === 'penalty') { if (!State.penaltyShots) State.penaltyShots = []; renderPenaltySignal(); updatePenaltyButtonLabel(); }
     else if (gameId === 'chicken') renderChickenSignal();
   }
 
@@ -2514,9 +2454,7 @@ body {
         renderMinesSignal(true);
         showToast('Nouveau Signal Mines 5x5 Prêt !', '🎯');
       } else if (State.currentGame === 'penalty') {
-        SoundFx.signalSuccess();
-        renderPenaltySignal(true);
-        showToast('Nouveau Signal Penalty Prêt !', '🎯');
+        advancePenaltyShot();
       } else if (State.currentGame === 'chicken') {
         generateRandomChickenSignal();
       }
@@ -2544,7 +2482,6 @@ body {
 
     if (!isUpdate || !document.getElementById('aviator-canvas')) {
       stageContent.innerHTML = 
-        '<div class="aviator-history-bar" id="aviator-history"></div>' +
         '<div class="aviator-canvas-container">' +
           '<canvas id="aviator-canvas"></canvas>' +
           '<div class="aviator-center-overlay">' +
@@ -2552,14 +2489,6 @@ body {
             '<div class="aviator-status-badge in-flight" id="aviator-flight-status">DÉCOLLAGE DU SIGNAL...</div>' +
           '</div>' +
         '</div>';
-
-      var historyBar = document.getElementById('aviator-history');
-      var past = ['2.14x', '1.85x', '14.20x', '3.10x', '1.08x', '5.40x', '8.90x'];
-      past.forEach(function(p) {
-        var v = parseFloat(p);
-        var cls = v >= 10 ? 'gold' : (v >= 2 ? 'purple' : 'blue');
-        historyBar.innerHTML += '<span class="history-pill ' + cls + '">' + p + '</span>';
-      });
     }
 
     var multEl = document.getElementById('aviator-pred-mult');
@@ -2740,16 +2669,6 @@ body {
         statusEl.textContent = '🎯 CIBLE VERROUILLÉE : ' + targetMult + 'x';
         SoundFx.signalSuccess();
 
-        // Update history bar
-        var historyBar = document.getElementById('aviator-history');
-        if (historyBar) {
-          var cls = targetMultFloat >= 10 ? 'gold' : (targetMultFloat >= 2 ? 'purple' : 'blue');
-          var newPill = document.createElement('span');
-          newPill.className = 'history-pill ' + cls;
-          newPill.textContent = targetMult + 'x';
-          historyBar.insertBefore(newPill, historyBar.firstChild);
-        }
-
         var cashoutCDF = Math.floor(getRecommendedBet() * targetMultFloat);
         showToast('Signal Aviator Validé: ' + targetMult + 'x (' + formatMoney(cashoutCDF) + ')', '✈️');
       }
@@ -2759,141 +2678,234 @@ body {
   }
 
   // ==========================================================================
-  // GAME 2: APPLE OF FORTUNE SIGNAL
+  // GAME 2: APPLE OF FORTUNE SIGNAL (JUNGLE WOOD THEME — 5 COLUMNS)
   // ==========================================================================
   function renderAppleSignal(isUpdate) {
-    roomGameTitle.innerHTML = '🍎 Apple of Fortune BetAndYou';
-    var multipliers = [
-      '1.23x', '1.54x', '1.93x', '2.41x', '4.02x', 
-      '6.71x', '11.18x', '27.92x', '69.80x', '341.00x'
-    ];
-
-    var towerHtml = '<div class="apple-tower-container">';
-    for (var r = 9; r >= 0; r--) {
-      var isTargetRow = r < 4;
-      var safeCol = Math.floor(Math.random() * 5);
-
-      towerHtml += 
-        '<div class="apple-row ' + (isTargetRow ? 'active-signal' : '') + '">' +
-          '<div class="apple-row-mult">' + multipliers[r] + '</div>' +
-          '<div class="apple-cells">';
-      for (var c = 0; c < 5; c++) {
-        var isSafe = isTargetRow && (c === safeCol);
-        towerHtml += '<div class="apple-cell ' + (isSafe ? 'signal-safe' : '') + '">' + (isSafe ? '🍎' : '🍏') + '</div>';
-      }
-      towerHtml += '</div></div>';
+    roomGameTitle.innerHTML = '\u{1F34E} Apple of Fortune BetAndYou';
+    var multipliers = ['x1.23','x1.54','x1.93','x2.41','x4.02','x6.71','x11.18','x27.97'];
+    var numRows = multipliers.length;
+    var numCols = 5;
+    var safeCells = {};
+    for (var r = 0; r < Math.min(4, numRows); r++) {
+      safeCells[r] = Math.floor(Math.random() * numCols);
     }
-    towerHtml += '</div>';
-    stageContent.innerHTML = towerHtml;
+    var html = '<div class="apple-game-container">';
+    html += '<div class="apple-board-frame">';
+    html += '<span class="apple-corner-leaf tl">\u{1F33F}</span>';
+    html += '<span class="apple-corner-leaf tr">\u{1F338}</span>';
+    html += '<span class="apple-corner-leaf bl">\u{1F338}</span>';
+    html += '<span class="apple-corner-leaf br">\u{1F33F}</span>';
+    html += '<div class="apple-grid-with-mults">';
+    html += '<div class="apple-grid-main">';
+    for (var row = numRows - 1; row >= 0; row--) {
+      for (var col = 0; col < numCols; col++) {
+        var isSafe = safeCells.hasOwnProperty(row) && safeCells[row] === col;
+        html += '<div class="apple-brick' + (isSafe ? ' revealed-safe' : '') + '">' + (isSafe ? '\u{1F34E}' : '') + '</div>';
+      }
+    }
+    html += '</div>';
+    html += '<div class="apple-mult-column">';
+    for (var row = numRows - 1; row >= 0; row--) {
+      var isActive = safeCells.hasOwnProperty(row);
+      html += '<div class="apple-mult-tag' + (isActive ? ' active-row' : '') + '">' + multipliers[row] + '</div>';
+    }
+    html += '</div></div></div>';
+    html += '</div>';
+    stageContent.innerHTML = html;
+
+    // Smoothly scroll and center on chicken
+    var track = document.getElementById('chicken-horizontal-scroll');
+    if (track) {
+      setTimeout(function() {
+        var activeEl = track.querySelector('.chicken-character-box');
+        if (activeEl) {
+          var node = activeEl.closest('.chicken-track-node, .chicken-start-node');
+          if (node) {
+            var scrollTarget = node.offsetLeft - (track.clientWidth / 2) + (node.clientWidth / 2);
+            track.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+          }
+        }
+      }, 10);
+    }
   }
 
   // ==========================================================================
-  // GAME 3: MINES 5x5 SIGNAL
+  // GAME 3: MINES 5x5 SIGNAL (LUCKY MINES THEME)
   // ==========================================================================
   function renderMinesSignal(isUpdate) {
-    roomGameTitle.innerHTML = '💣 Mines BetAndYou 5x5';
+    roomGameTitle.innerHTML = '\u{1F4A3} Lucky Mines BetAndYou';
     var safeSpots = [];
     while (safeSpots.length < 5) {
       var idx = Math.floor(Math.random() * 25);
       if (safeSpots.indexOf(idx) === -1) safeSpots.push(idx);
     }
-
-    var html = 
-      '<div class="mines-top-bar">' +
-        '<span>Mines Détectées: <strong class="text-red">3</strong></span>' +
-        '<span>Diamants Sûrs: <strong class="text-cyan">5</strong></span>' +
-        '<span>Cote Recommandée: <strong class="text-gold">2.45x</strong></span>' +
-      '</div>' +
-      '<div class="mines-grid">';
-
+    var html = '<div class="mines-game-container">';
+    html += '<div class="mines-grid">';
     for (var i = 0; i < 25; i++) {
       var isDiamond = safeSpots.indexOf(i) !== -1;
-      html += '<div class="mine-tile ' + (isDiamond ? 'signal-diamond' : '') + '">' + (isDiamond ? '💎' : '') + '</div>';
+      if (isDiamond) {
+        html += '<div class="mine-tile signal-diamond"><span class="star-icon">\u2605</span></div>';
+      } else {
+        html += '<div class="mine-tile"><span class="star-icon">\u2605</span></div>';
+      }
     }
     html += '</div>';
+    html += '</div>';
     stageContent.innerHTML = html;
+
+    // Smoothly scroll and center on chicken
+    var track = document.getElementById('chicken-horizontal-scroll');
+    if (track) {
+      setTimeout(function() {
+        var activeEl = track.querySelector('.chicken-character-box');
+        if (activeEl) {
+          var node = activeEl.closest('.chicken-track-node, .chicken-start-node');
+          if (node) {
+            var scrollTarget = node.offsetLeft - (track.clientWidth / 2) + (node.clientWidth / 2);
+            track.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+          }
+        }
+      }, 10);
+    }
   }
 
   // ==========================================================================
-  // GAME 4: PENALTY SHOOTOUT SIGNAL
+  // GAME 4: PENALTY SHOOTOUT (4-SHOT SERIES PROGRESSION)
   // ==========================================================================
-  function renderPenaltySignal(isUpdate) {
-    roomGameTitle.innerHTML = '⚽ Penalty BetAndYou';
-    var targetSpot = Math.floor(Math.random() * 6);
-    var spotNames = ['Haut-Gauche', 'Haut-Centre', 'Haut-Droite', 'Bas-Gauche', 'Bas-Centre', 'Bas-Droite'];
+  function resetPenaltyGame() {
+    State.penaltyShots = [];
+    renderPenaltySignal(false);
+    updatePenaltyButtonLabel();
+    showToast('Nouvelle session Penalty (0/4 tirs)', '\u26BD');
+  }
 
-    stageContent.innerHTML = 
-      '<div class="penalty-arena">' +
-        '<div class="penalty-goal-box">' +
-          '<div class="goalkeeper">🧤</div>' +
-          '<div class="penalty-targets-layer">';
+  function updatePenaltyButtonLabel() {
+    if (State.currentGame !== 'penalty') return;
+    var count = (State.penaltyShots || []).length;
+    if (count === 0) {
+      btnGenerateSignal.innerHTML = '<span>\u26BD</span> OBTENIR LE 1er TIR (1/4)';
+    } else if (count === 1) {
+      btnGenerateSignal.innerHTML = '<span>\u26BD</span> OBTENIR LE 2\u00E8me TIR (2/4)';
+    } else if (count === 2) {
+      btnGenerateSignal.innerHTML = '<span>\u26BD</span> OBTENIR LE 3\u00E8me TIR (3/4)';
+    } else if (count === 3) {
+      btnGenerateSignal.innerHTML = '<span>\u26BD</span> OBTENIR LE 4\u00E8me TIR (4/4)';
+    } else {
+      btnGenerateSignal.innerHTML = '<span>\u{1F504}</span> RECOMMENCER LA S\u00C9RIE (0/4)';
+    }
+  }
 
-    var targetsHtml = '';
-    for (var i = 0; i < 6; i++) {
-      var isLock = i === targetSpot;
-      targetsHtml += '<div class="penalty-target ' + (isLock ? 'signal-lock' : '') + '">' + (isLock ? '🎯' : '') + '</div>';
+  function advancePenaltyShot() {
+    if (!State.penaltyShots) State.penaltyShots = [];
+    if (State.penaltyShots.length >= 4) {
+      State.penaltyShots = [];
     }
 
-    stageContent.innerHTML += targetsHtml + 
-          '</div>' +
-        '</div>' +
-        '<div style="margin-top: 14px; font-size: 15px; font-weight: 800; text-align: center;">' +
-          'Zone Faible du Gardien: <strong class="text-green">' + spotNames[targetSpot] + '</strong>' +
-        '</div>' +
-      '</div>';
+    var available = [];
+    for (var i = 0; i < 15; i++) {
+      if (State.penaltyShots.indexOf(i) === -1) available.push(i);
+    }
+    if (available.length === 0) available = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+
+    var nextSpot = available[Math.floor(Math.random() * available.length)];
+    State.penaltyShots.push(nextSpot);
+
+    renderPenaltySignal(true);
+    SoundFx.signalSuccess();
+
+    var shotNum = State.penaltyShots.length;
+    if (shotNum === 4) {
+      showToast('S\u00E9rie de 4 tirs compl\u00E8te valid\u00E9e ! \u{1F3AF}', '\u{1F3C6}');
+    } else {
+      showToast('Tir #' + shotNum + ' / 4 Enregistr\u00E9 !', '\u26BD');
+    }
+  }
+
+  function renderPenaltySignal(isUpdate) {
+    roomGameTitle.innerHTML = '\u26BD Penalty Unlimited BetAndYou';
+    if (!State.penaltyShots) State.penaltyShots = [];
+    var shots = State.penaltyShots;
+    var totalShots = shots.length;
+    var lastShot = totalShots > 0 ? shots[totalShots - 1] : -1;
+
+    var html = '<div class="penalty-game-container">';
+
+    // Top Series Counter Bar & Reset Button
+    html += '<div class="penalty-series-header">';
+    html += '<div class="penalty-series-pills">';
+    for (var s = 1; s <= 4; s++) {
+      var pCls = 'penalty-shot-dot';
+      if (s < totalShots) pCls += ' done';
+      else if (s === totalShots) pCls += ' current';
+      html += '<div class="' + pCls + '">' + (s <= totalShots ? '\u26BD' : '\u25CB') + ' Tir ' + s + '</div>';
+    }
+    html += '</div>';
+    html += '<button class="btn-reset-penalty" id="btn-penalty-reset-series" type="button">\u{1F504} Nouvelle S\u00E9rie</button>';
+    html += '</div>';
+
+    // Sky + Goal Field
+    html += '<div class="penalty-sky-area">';
+    html += '<div class="penalty-palm-left">\u{1F334}</div>';
+    html += '<div class="penalty-palm-right">\u{1F334}</div>';
+
+    html += '<div class="penalty-goal-wrapper"><div class="penalty-goal-box">';
+    html += '<div class="penalty-targets-layer">';
+    for (var i = 0; i < 15; i++) {
+      var shotIndex = shots.indexOf(i);
+      var isHit = shotIndex !== -1;
+      var isLatest = (i === lastShot);
+
+      if (isLatest) {
+        html += '<div class="penalty-target signal-lock">\u26BD<span class="penalty-target-badge">#' + (shotIndex + 1) + '</span></div>';
+      } else if (isHit) {
+        html += '<div class="penalty-target scored-shot">\u26BD<span class="penalty-target-badge">#' + (shotIndex + 1) + '</span></div>';
+      } else {
+        html += '<div class="penalty-target">\u26AA</div>';
+      }
+    }
+    html += '</div></div></div>';
+    html += '<div class="penalty-court-ball">\u26BD</div>';
+    html += '</div>';
+    html += '</div>';
+
+    stageContent.innerHTML = html;
+
+    var btnReset = document.getElementById('btn-penalty-reset-series');
+    if (btnReset) {
+      btnReset.addEventListener('click', function(e) {
+        e.stopPropagation();
+        initAudio();
+        SoundFx.click();
+        resetPenaltyGame();
+      });
+    }
+
+    updatePenaltyButtonLabel();
   }
 
   // ==========================================================================
-  // GAME 5: CHICKEN ROAD (AUTHENTIC ENGINE WITH RANDOM TARGET COEFFICIENTS)
+  // GAME 5: CHICKEN ROAD (SINGLE-PATH HORIZONTAL HIGHWAY — LEFT TO RIGHT)
   // ==========================================================================
   var ChickenDifficultyConfig = {
     'Easy': {
-      mults: ['1.18x', '1.45x', '1.82x', '2.30x', '2.95x', '3.80x', '5.00x', '6.80x'],
-      hitChance: '8.2%'
-    },
-    'Medium': {
-      mults: ['1.42x', '2.15x', '3.10x', '4.11x', '4.64x', '5.39x', '6.50x', '8.36x'],
-      hitChance: '14.8%'
-    },
-    'Hard': {
-      mults: ['1.60x', '2.65x', '4.50x', '7.80x', '14.00x', '26.00x', '50.00x', '100.00x'],
-      hitChance: '24.5%'
-    },
-    'Hardcore': {
-      mults: ['2.10x', '4.60x', '10.50x', '24.00x', '58.00x', '145.00x', '380.00x', '1000.00x'],
-      hitChance: '38.0%'
+      mults: ['1.12x','1.28x','1.47x','1.70x','1.98x','2.33x','2.76x','3.22x','4.03x'],
+      hitChance: '50%'
     }
   };
-
-  function randomizeChickenHazards(safeTargetIndex, totalLanes) {
-    var trucks = [], vans = [], barriers = [];
-    for (var i = 0; i < totalLanes; i++) {
-      if (i === safeTargetIndex) continue;
-      var rnd = Math.random();
-      if (rnd < 0.22 && trucks.length < 2) trucks.push(i);
-      else if (rnd < 0.44 && vans.length < 2) vans.push(i);
-      else if (rnd < 0.62 && barriers.length < 2) barriers.push(i);
-    }
-    State.chickenTrucks = trucks;
-    State.chickenVans = vans;
-    State.chickenBarriers = barriers;
-  }
 
   function generateRandomChickenSignal() {
     if (State.chickenAnimTimer) {
       clearInterval(State.chickenAnimTimer);
       State.chickenAnimTimer = null;
     }
+    var diff = State.chickenDifficulty || 'Easy';
+    var cfg = ChickenDifficultyConfig[diff] || ChickenDifficultyConfig['Easy'];
 
-    var diff = State.chickenDifficulty || 'Medium';
-    var cfg = ChickenDifficultyConfig[diff];
-    var maxSteps = cfg.mults.length;
-
-    var randomDestination = Math.floor(Math.random() * (maxSteps - 1)) + 1;
+    // Pick target hops between 2 and 5
+    var randomDestination = Math.floor(Math.random() * 4) + 2; // 2, 3, 4, or 5 hops
     State.chickenTarget = randomDestination;
-    randomizeChickenHazards(randomDestination, maxSteps);
-
     State.chickenStep = 0;
+
     renderChickenSignal(true);
     SoundFx.step();
 
@@ -2908,205 +2920,120 @@ body {
         clearInterval(State.chickenAnimTimer);
         State.chickenAnimTimer = null;
         SoundFx.signalSuccess();
-        var finalMult = cfg.mults[randomDestination];
+        var finalMult = cfg.mults[randomDestination - 1];
         var finalMultNum = parseFloat(finalMult.replace('x', ''));
         var cashoutCDF = Math.floor(getRecommendedBet() * finalMultNum);
-        showToast('Signal Validé: ' + finalMult + ' (' + formatMoney(cashoutCDF) + ')', '🎯');
+        showToast('Objectif Atteint : ' + randomDestination + ' sauts (' + finalMult + ' = ' + formatMoney(cashoutCDF) + ')', '\u{1F3AF}');
       }
-    }, 220);
+    }, 320);
+  }
+
+  function chickenSVGMarkup() {
+    return '<svg viewBox="0 0 70 70" class="chicken-svg-avatar">' +
+      '<ellipse cx="35" cy="42" rx="22" ry="19" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>' +
+      '<path d="M 24 40 Q 32 46 38 40 Q 32 35 24 40" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>' +
+      '<path d="M 30 22 C 28 15, 35 15, 37 19 C 39 15, 46 15, 44 22 Z" fill="#EF4444"/>' +
+      '<circle cx="42" cy="30" r="4.5" fill="#0F172A"/>' +
+      '<circle cx="43" cy="29" r="1.5" fill="#FFFFFF"/>' +
+      '<polygon points="48,32 58,36 48,40" fill="#F97316"/>' +
+      '<circle cx="40" cy="37" r="3.5" fill="#FECDD3" opacity="0.8"/>' +
+      '<path d="M 28 58 L 28 63 M 25 63 L 31 63 M 42 58 L 42 63 M 39 63 L 45 63" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>' +
+      '</svg>';
   }
 
   function renderChickenSignal(isUpdate) {
-    roomGameTitle.innerHTML = '🐔 Chicken Road BetAndYou';
+    roomGameTitle.innerHTML = '\u{1F414} Chicken Road BetAndYou';
+    var diff = State.chickenDifficulty || 'Easy';
+    var cfg = ChickenDifficultyConfig[diff] || ChickenDifficultyConfig['Easy'];
+    var mults = cfg.mults;
+    var numNodes = mults.length;
+    var currentHop = State.chickenStep || 0; // 0 = start pad, 1..N = on that step
+    var targetHops = State.chickenTarget || 3; // total hops to make (e.g. 4 hops)
+    var targetMult = mults[targetHops - 1] || mults[2];
 
-    var diff = State.chickenDifficulty || 'Medium';
-    var cfg = ChickenDifficultyConfig[diff];
-    var currentStep = State.chickenStep;
-    var targetStep = State.chickenTarget;
-    var currentMult = cfg.mults[currentStep] || cfg.mults[0];
-    var targetMult = cfg.mults[targetStep] || cfg.mults[3];
+    var html = '<div class="chicken-game-container">';
 
-    var targetMultFloat = parseFloat(targetMult.replace('x', ''));
-    var cashoutAmount = Math.floor(getRecommendedBet() * targetMultFloat);
+    // Summary Target Card
+    html += '<div class="chicken-summary-banner">';
+    html += '<div class="chicken-summary-top">';
+    html += '<div class="chicken-summary-title">\u{1F3AF} PR\u00C9DICTION : <strong>' + targetHops + ' SAUTS \u27A4 CASHOUT</strong></div>';
+    html += '<div class="chicken-summary-hops-badge">COTE ' + targetMult + '</div>';
+    html += '</div>';
 
-    var chickenHtml = 
-      '<div class="chicken-game-container">' +
-        // Top Game Bar
-        '<div class="chicken-top-bar">' +
-          '<div class="chicken-logo-tag">CHICKEN R<span class="egg-o">🥚</span>AD</div>' +
-          '<div class="chicken-live-stat">' +
-            '<span class="live-dot"></span> Online: <strong>33,386</strong>' +
-          '</div>' +
-          '<div class="chicken-live-win">👤 Blush... +$5,160.00</div>' +
-        '</div>' +
+    // Step-by-Step Horizontal Chain
+    html += '<div class="chicken-steps-chain">';
+    for (var k = 0; k < targetHops; k++) {
+      var isLast = (k === targetHops - 1);
+      var isDone = ((k + 1) <= currentHop);
+      var chipCls = 'chicken-step-chip';
+      if (isLast) chipCls += ' target';
+      else if (isDone) chipCls += ' active';
+      html += '<div class="' + chipCls + '">#' + (k + 1) + ' ' + mults[k] + (isLast ? ' \u{1F3AF}' : '') + '</div>';
+      if (!isLast) html += '<span class="chicken-step-arrow">\u2794</span>';
+    }
+    html += '</div>';
+    html += '</div>';
 
-        // Highway Lanes
-        '<div class="chicken-highway" id="chicken-highway-track">' +
-          '<div class="highway-lanes">';
+    // Horizontal Single-Path Track (Left to Right)
+    html += '<div class="chicken-highway-track" id="chicken-horizontal-scroll">';
+    html += '<div class="chicken-track-nodes">';
 
-    for (var i = 0; i < cfg.mults.length; i++) {
-      var mult = cfg.mults[i];
-      var isPassed = i < currentStep;
-      var isCurrent = i === currentStep;
-      var isTarget = i === targetStep;
+    // Start Node (Pad)
+    html += '<div class="chicken-start-node">';
+    if (currentHop === 0) {
+      html += '<div class="chicken-character-box hopping">' + chickenSVGMarkup() + '</div>';
+    } else {
+      html += '<div class="chicken-start-pad">D\u00C9PART</div>';
+    }
+    html += '</div>';
 
-      var hasTruck = (State.chickenTrucks || []).indexOf(i) !== -1;
-      var hasVan = (State.chickenVans || []).indexOf(i) !== -1;
-      var hasBarrier = (State.chickenBarriers || []).indexOf(i) !== -1;
+    // Multiplier Discs from Left to Right
+    for (var i = 0; i < numNodes; i++) {
+      var stepNum = i + 1;
+      var mult = mults[i];
+      var isTarget = (stepNum === targetHops);
+      var isPastTarget = (stepNum > targetHops);
+      var isCurrent = (stepNum === currentHop);
 
-      chickenHtml += '<div class="highway-lane" data-lane-idx="' + i + '">';
-      chickenHtml += '<span class="lane-idx-tag">#' + (i + 1) + '</span>';
+      html += '<div class="chicken-track-node">';
 
-      // Top Obstacle
-      if (hasTruck && !isCurrent) {
-        chickenHtml += 
-          '<div class="road-obstacle-top">' +
-            '<div class="truck-vehicle">' +
-              '<span class="truck-roof-tag">IN/OUT</span>' +
-              '<div class="truck-windshield"></div>' +
-              '<div class="truck-grille">' +
-                '<div class="truck-headlight"></div>' +
-                '<div class="truck-headlight"></div>' +
-              '</div>' +
-            '</div>' +
-          '</div>';
-      } else if (hasBarrier && !isCurrent) {
-        chickenHtml += '<div class="road-obstacle-top"><div class="road-barrier"></div></div>';
-      }
-
-      // Chicken or Manhole
       if (isCurrent) {
-        chickenHtml += 
-          '<div class="chicken-character-box hopping">' +
-            '<svg viewBox="0 0 64 64" class="chicken-svg-avatar">' +
-              '<ellipse cx="32" cy="38" rx="20" ry="18" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>' +
-              '<path d="M 22 36 Q 30 42 36 36 Q 30 32 22 36" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>' +
-              '<path d="M 28 20 C 26 14, 32 14, 34 18 C 36 14, 42 14, 40 20 Z" fill="#EF4444"/>' +
-              '<circle cx="38" cy="28" r="4" fill="#0F172A"/>' +
-              '<circle cx="39" cy="27" r="1.5" fill="#FFFFFF"/>' +
-              '<polygon points="44,30 52,33 44,36" fill="#F97316"/>' +
-              '<circle cx="36" cy="34" r="3" fill="#FECDD3" opacity="0.8"/>' +
-              '<path d="M 26 54 L 26 58 M 23 58 L 29 58 M 38 54 L 38 58 M 35 58 L 41 58" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>' +
-            '</svg>' +
-            '<div class="chicken-mult-pill">' + mult + '</div>' +
-          '</div>';
+        // Chicken is currently here
+        html += '<div class="chicken-character-box hopping">' + chickenSVGMarkup() + '</div>';
+      } else if (isTarget) {
+        // Target Cashout disc!
+        html += '<div class="chicken-disc disc-target">' + mult + '<span class="chicken-step-number-tag">CASHOUT \u{1F3AF}</span></div>';
+      } else if (!isPastTarget) {
+        // Safe intermediate step
+        html += '<div class="chicken-disc disc-safe">' + mult + '<span class="chicken-step-number-tag">SAUT #' + stepNum + '</span></div>';
       } else {
-        var discClasses = 'manhole-disc';
-        if (isPassed) discClasses += ' step-gold';
-        else if (isTarget) discClasses += ' signal-predicted-safe signal-target-cashout';
-
-        chickenHtml += 
-          '<div class="' + discClasses + '" title="Cliquez pour avancer ici">' +
-            '<div class="manhole-slits"></div>' +
-            '<div class="manhole-multiplier">' + mult + '</div>' +
-          '</div>';
+        // Past target: greyed out STOP
+        html += '<div class="chicken-disc disc-default">' + mult + '<span class="chicken-step-number-tag">STOP</span></div>';
       }
 
-      // Bottom Obstacle
-      if (hasVan && !isCurrent) {
-        chickenHtml += 
-          '<div class="road-obstacle-bottom">' +
-            '<div class="van-vehicle">' +
-              '<div class="van-roof-green"></div>' +
-              '<div class="van-windshield"></div>' +
-            '</div>' +
-          '</div>';
-      }
-
-      chickenHtml += '</div>';
+      html += '</div>';
     }
 
-    chickenHtml += 
-          '</div>' +
-        '</div>' +
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
 
-        // Bottom Controls Bar
-        '<div class="chicken-controls-bar">' +
-          '<div class="chicken-diff-row">' +
-            '<div class="chicken-diff-tabs" id="chicken-diff-selector">' +
-              '<button class="btn-diff-tab ' + (diff === 'Easy' ? 'active' : '') + '" data-diff="Easy" type="button">Easy</button>' +
-              '<button class="btn-diff-tab ' + (diff === 'Medium' ? 'active' : '') + '" data-diff="Medium" type="button">Medium</button>' +
-              '<button class="btn-diff-tab ' + (diff === 'Hard' ? 'active' : '') + '" data-diff="Hard" type="button">Hard</button>' +
-              '<button class="btn-diff-tab ' + (diff === 'Hardcore' ? 'active' : '') + '" data-diff="Hardcore" type="button">Hardcore</button>' +
-            '</div>' +
-            '<div class="chicken-hit-chance">' +
-              'Risque d\'impact: <strong class="text-red">' + cfg.hitChance + '</strong>' +
-            '</div>' +
-          '</div>' +
+    stageContent.innerHTML = html;
 
-          '<div class="chicken-action-btns-row">' +
-            '<button class="btn-chicken-cashout" id="btn-chicken-cashout-hint" type="button">' +
-              '🎯 CASHOUT: ' + targetMult + ' (' + formatMoney(cashoutAmount) + ')' +
-            '</button>' +
-            '<button class="btn-chicken-go" id="btn-chicken-next-step" type="button">' +
-              '⚡ NOUVEAU SIGNAL IA' +
-            '</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-
-    stageContent.innerHTML = chickenHtml;
-
-    // Center scroll on current chicken position
-    var trackEl = document.getElementById('chicken-highway-track');
-    if (trackEl) {
-      var activeLane = trackEl.querySelector('.highway-lane[data-lane-idx="' + currentStep + '"]');
-      if (activeLane) {
-        trackEl.scrollLeft = activeLane.offsetLeft - 100;
-      }
-    }
-
-    // Attach difficulty selector click events
-    var diffTabs = document.querySelectorAll('#chicken-diff-selector .btn-diff-tab');
-    diffTabs.forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        initAudio();
-        SoundFx.click();
-        State.chickenDifficulty = this.getAttribute('data-diff');
-        var newCfg = ChickenDifficultyConfig[State.chickenDifficulty];
-        State.chickenTarget = Math.floor(Math.random() * (newCfg.mults.length - 2)) + 2;
-        State.chickenStep = 0;
-        randomizeChickenHazards(State.chickenTarget, newCfg.mults.length);
-        renderChickenSignal(true);
-        showToast('Difficulté: ' + State.chickenDifficulty, '🐔');
-      });
-    });
-
-    // Advance button triggers random signal generator
-    var btnGo = document.getElementById('btn-chicken-next-step');
-    if (btnGo) {
-      btnGo.addEventListener('click', function(e) {
-        e.stopPropagation();
-        initAudio();
-        generateRandomChickenSignal();
-      });
-    }
-
-    // Cashout hint button
-    var btnCashout = document.getElementById('btn-chicken-cashout-hint');
-    if (btnCashout) {
-      btnCashout.addEventListener('click', function(e) {
-        e.stopPropagation();
-        initAudio();
-        SoundFx.signalSuccess();
-        showToast('Objectif Cashout: ' + targetMult + ' (' + formatMoney(cashoutAmount) + ')', '🎯');
-      });
-    }
-
-    // Click on any lane to move chicken there directly
-    var lanes = stageContent.querySelectorAll('.highway-lane');
-    lanes.forEach(function(lane) {
-      lane.addEventListener('click', function() {
-        var idx = parseInt(this.getAttribute('data-lane-idx'), 10);
-        if (!isNaN(idx) && idx !== State.chickenStep) {
-          initAudio();
-          SoundFx.step();
-          State.chickenStep = idx;
-          renderChickenSignal(true);
+    // Smoothly scroll and center on chicken
+    var track = document.getElementById('chicken-horizontal-scroll');
+    if (track) {
+      setTimeout(function() {
+        var activeEl = track.querySelector('.chicken-character-box');
+        if (activeEl) {
+          var node = activeEl.closest('.chicken-track-node, .chicken-start-node');
+          if (node) {
+            var scrollTarget = node.offsetLeft - (track.clientWidth / 2) + (node.clientWidth / 2);
+            track.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+          }
         }
-      });
-    });
+      }, 10);
+    }
   }
 
   // ==========================================================================
